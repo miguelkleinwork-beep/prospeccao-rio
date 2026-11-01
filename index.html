@@ -24,11 +24,11 @@
   --wa:#1F9D55; --wa-ink:#FFFFFF;
   --warn:#A7570A; --warn-soft:#FCEBD6; --danger:#A33628; --danger-soft:#F8E0DB;
   --s-novo:#8B9893; --s-enviada:#2F6CAB; --s-respondeu:#16775F; --s-reuniao:#7548AA; --s-piloto:#B47A08; --s-perdido:#A33628;
-  --g-construcao:#B4501E; --g-oficina:#2F5FA8; --g-marcenaria:#8A5A2B; --g-lavanderia:#13809A; --g-limpeza:#6E4BB0; --g-restaurante:#B23B6E; --g-outro:#6B7873; --g-serralheria:#4F5E6E; --g-costura:#5E7A2E;
+  --g-construcao:#B4501E; --g-oficina:#2F5FA8; --g-marcenaria:#8A5A2B; --g-lavanderia:#13809A; --g-limpeza:#6E4BB0; --g-restaurante:#B23B6E; --g-outro:#6B7873; --g-serralheria:#4F5E6E; --g-costura:#5E7A2E; --g-hotel:#8A6A16;
   --f-display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
   --f-body:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px); --tb:max(6px, calc(env(safe-area-inset-bottom,0px) - 14px));
   --gut-l:max(16px, env(safe-area-inset-left,0px)); --gut-r:max(16px, env(safe-area-inset-right,0px));
   color-scheme:light;
 }
@@ -39,7 +39,7 @@
   --wa:#2DB868; --wa-ink:#04130A;
   --warn:#E9A257; --warn-soft:#3A2913; --danger:#E6826F; --danger-soft:#3A1C17;
   --s-novo:#7F8E89; --s-enviada:#71A9E3; --s-respondeu:#45BB95; --s-reuniao:#B395E4; --s-piloto:#E4B54D; --s-perdido:#E6826F;
-  --g-construcao:#E08A5C; --g-oficina:#7FA3E0; --g-marcenaria:#C99A6A; --g-lavanderia:#5DC0D6; --g-limpeza:#AB92E0; --g-restaurante:#E07BA6; --g-outro:#93A39D; --g-serralheria:#9DAABA; --g-costura:#A9C46F;
+  --g-construcao:#E08A5C; --g-oficina:#7FA3E0; --g-marcenaria:#C99A6A; --g-lavanderia:#5DC0D6; --g-limpeza:#AB92E0; --g-restaurante:#E07BA6; --g-outro:#93A39D; --g-serralheria:#9DAABA; --g-costura:#A9C46F; --g-hotel:#D9B95E;
   color-scheme:dark}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none}
@@ -63,13 +63,13 @@ button{cursor:pointer}
 .kpi.hot b{color:#F2B266}
 .kpi[aria-pressed="true"]{box-shadow:inset 0 0 0 2px var(--brand-ink)}
 
-.wrap{max-width:760px;margin:0 auto;padding:14px var(--gut-r) calc(96px + var(--safe-b)) var(--gut-l);display:flex;flex-direction:column;gap:12px}
+.wrap{max-width:760px;margin:0 auto;padding:14px var(--gut-r) calc(132px + var(--tb)) var(--gut-l);display:flex;flex-direction:column;gap:12px}
 .search{position:relative}
 .search input{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px 12px 40px;font-size:16px}
 .search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted)}
 .chips{display:flex;gap:6px;overflow-x:auto;margin:0 calc(-1 * var(--gut-r)) 0 calc(-1 * var(--gut-l));padding:2px var(--gut-r) 2px var(--gut-l);scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;display:inline-flex;gap:6px;align-items:center;white-space:nowrap;color:var(--ink)}
+.chip{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 13px;font-size:13px;font-weight:600;display:inline-flex;gap:6px;align-items:center;white-space:nowrap;color:var(--ink)}
 .chip .c{font-family:var(--f-mono);font-weight:500;color:var(--muted);font-size:12px}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .chip[aria-pressed="true"] .c{color:inherit;opacity:.7}
@@ -79,11 +79,12 @@ button{cursor:pointer}
 .list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .card{width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:2px 12px;align-items:center;color:var(--ink)}
 .card:active{transform:scale(.99)}
-.av{grid-row:1 / span 2;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:16px;color:#fff}
+.av{grid-row:1 / span 2;align-self:start;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:16px;color:#fff}
 .card .nm{font-weight:600;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .card .sub{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;grid-column:2}
+.card .meta2{grid-column:1 / -1;white-space:normal;font-size:12.5px;margin-top:6px;padding-top:8px;border-top:1px solid var(--line)}
 .card .side{grid-row:1 / span 2;grid-column:3;display:flex;flex-direction:column;align-items:flex-end;gap:5px}
-.stage-tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap}
+.stage-tag{display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:var(--sc);background:color-mix(in srgb, var(--sc) 14%, transparent);border-radius:7px;padding:3px 8px;white-space:nowrap}
 .due{font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;background:var(--warn-soft);color:var(--warn);white-space:nowrap}
 .due.calm{background:var(--sunk);color:var(--muted);font-family:var(--f-mono);font-weight:500}
 .empty{background:var(--surface);border:1px dashed var(--line);border-radius:16px;padding:22px;color:var(--muted);text-align:center}
@@ -103,20 +104,22 @@ button{cursor:pointer}
 .facts dd{margin:0;min-width:0;overflow-wrap:anywhere}
 a.chip{text-decoration:none}
 /* tab bar + fab */
-.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px var(--gut-r) calc(6px + var(--safe-b)) var(--gut-l)}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:4px var(--gut-r) var(--tb) var(--gut-l)}
 .tabbar-in{display:flex;gap:4px;width:100%;max-width:520px}
-.tab{flex:1;border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;font-size:11px;font-weight:600;border-radius:10px}
-.tab svg{width:22px;height:22px}
+.tab{flex:1;border:0;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px;font-size:10.5px;font-weight:600;border-radius:10px}
+.tab svg{width:21px;height:21px}
 .tab[aria-selected="true"]{color:var(--accent)}
-.fab{position:fixed;right:calc(var(--gut-r) + 2px);bottom:calc(76px + var(--safe-b));z-index:21;width:56px;height:56px;border-radius:18px;border:0;background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 20px rgba(10,40,32,.25);display:grid;place-items:center}
+.fab{position:fixed;right:calc(var(--gut-r) + 2px);bottom:calc(64px + var(--tb));z-index:21;width:52px;height:52px;border-radius:16px;border:0;background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 20px rgba(10,40,32,.25);display:grid;place-items:center}
 .fab svg{width:26px;height:26px}
 
 /* sheet (lead detail) */
 .sheet{position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
 .sheet-top{position:sticky;top:0;z-index:2;background:var(--bg);padding:calc(var(--safe-t) + 8px) var(--gut-r) 8px var(--gut-l);border-bottom:1px solid var(--line)}
-.sheet-top-in{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:8px}
+.sheet-top-in{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.topdel{border:0;background:transparent;color:var(--danger);font-weight:600;font-size:15px;padding:8px 0}
+.topdel.armed{background:var(--danger);color:#fff;border-radius:10px;padding:8px 12px}
 .back{border:0;background:transparent;color:var(--accent);font-weight:600;font-size:16px;display:inline-flex;align-items:center;gap:2px;padding:8px 6px 8px 0}
-.sheet-body{max-width:760px;margin:0 auto;padding:16px var(--gut-r) calc(110px + var(--safe-b)) var(--gut-l);display:flex;flex-direction:column;gap:16px}
+.sheet-body{max-width:760px;margin:0 auto;padding:16px var(--gut-r) calc(96px + var(--tb)) var(--gut-l);display:flex;flex-direction:column;gap:16px}
 .lead-head{display:flex;gap:12px;align-items:center}
 .lead-head .av{width:52px;height:52px;border-radius:14px;font-size:20px;grid-row:auto}
 .lead-head h2{margin:0;font-family:var(--f-display);font-size:22px;font-weight:800;line-height:1.15;text-wrap:balance}
@@ -124,8 +127,8 @@ a.chip{text-decoration:none}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:12px}
 .panel h3{margin:0;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 .stages{display:flex;gap:6px;flex-wrap:wrap}
-.stage-btn{border:1px solid var(--line);background:var(--sunk);border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
-.stage-btn[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.stage-btn{border:1px solid var(--line);background:var(--sunk);border-radius:10px;padding:9px 13px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.stage-btn[aria-pressed="true"]{background:var(--sc);color:#fff;border-color:var(--sc)}
 .tpl-chips{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
 .tpl-chips::-webkit-scrollbar{display:none}
 .field{width:100%;background:var(--sunk);border:1px solid var(--line);border-radius:12px;padding:11px 12px;font-size:16px}
@@ -144,7 +147,7 @@ label.f.wide{grid-column:1 / -1}
 .btn.danger{color:var(--danger);background:transparent}
 .btn.danger.armed{background:var(--danger);border-color:var(--danger);color:#fff}
 .btn svg{width:20px;height:20px;flex:none}
-.actionbar{position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--surface);border-top:1px solid var(--line);padding:10px var(--gut-r) calc(10px + var(--safe-b)) var(--gut-l)}
+.actionbar{position:fixed;left:0;right:0;bottom:0;z-index:31;background:var(--surface);border-top:1px solid var(--line);padding:8px var(--gut-r) max(8px, calc(var(--safe-b) - 12px)) var(--gut-l)}
 .actionbar-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:8px}
 .hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .hist li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;font-size:14px}
@@ -156,7 +159,7 @@ label.f.wide{grid-column:1 / -1}
 .screen-head h1{font-family:var(--f-display);font-weight:800;font-size:26px;margin:0}
 .screen-head p{margin:4px 0 0;color:var(--muted)}
 
-.toast{position:fixed;left:50%;bottom:calc(150px + var(--safe-b));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px;z-index:50;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
+.toast{position:fixed;left:50%;bottom:calc(128px + var(--tb));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-weight:600;font-size:14px;z-index:50;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
 @media (prefers-reduced-motion:no-preference){
   .sheet{animation:slide .22s ease-out}
   @keyframes slide{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
@@ -194,15 +197,18 @@ label.f.wide{grid-column:1 / -1}
     <ul class="list" id="list"></ul>
     </div>
     <div id="disc-view" class="stack" hidden>
-      <p class="hint">Empresas que encontrei no Google Maps e ainda não estão na sua lista. Toque em Adicionar para começar a acompanhar.</p>
+      <div class="panel" id="finder">
+        <h3>Buscar empresas</h3>
+        <input class="field" id="f-bairro" type="text" placeholder="Bairro (ex.: Tijuca, Méier, Barra)" autocomplete="off" enterkeyhint="search">
+        <div class="chips" id="f-types"></div>
+        <button class="btn primary" id="f-go" type="button">Buscar</button>
+        <p class="hint" id="f-status">Escolha um bairro e um tipo de negócio. A busca usa o mapa aberto (OpenStreetMap), que nem sempre tem todas as empresas.</p>
+        <ul class="list" id="f-results"></ul>
+        <div class="row"><a class="btn sm" id="f-gmaps" href="#" target="_blank" rel="noopener">Abrir a mesma busca no Google Maps</a><button class="btn sm" id="f-manual" type="button">Adicionar manualmente</button></div>
+      </div>
+      <h3 class="section-title">Sugestões que já levantei</h3>
       <div class="chips" id="disc-chips"></div>
       <ul class="list" id="disc-list"></ul>
-      <div class="panel">
-        <h3>Buscar mais no Google Maps</h3>
-        <p class="hint">Digite um bairro e toque no tipo de negócio. Achou uma boa? Adicione pelo botão +.</p>
-        <input class="field" id="bairro" type="text" placeholder="Bairro (ex.: Tijuca)" autocomplete="off">
-        <div class="row" id="maps-links"></div>
-      </div>
     </div>
   </div>
 </div>
@@ -261,7 +267,7 @@ const STAGES=[
   {id:'reuniao',label:'Reunião'},{id:'piloto',label:'Piloto'},{id:'perdido',label:'Perdido'}];
 const SEGS=[
   {id:'Construção',v:'--g-construcao'},{id:'Oficina',v:'--g-oficina'},{id:'Marcenaria',v:'--g-marcenaria'},
-  {id:'Lavanderia',v:'--g-lavanderia'},{id:'Limpeza',v:'--g-limpeza'},{id:'Serralheria',v:'--g-serralheria'},{id:'Restaurante',v:'--g-restaurante'},{id:'Costura',v:'--g-costura'},{id:'Outro',v:'--g-outro'}];
+  {id:'Lavanderia',v:'--g-lavanderia'},{id:'Limpeza',v:'--g-limpeza'},{id:'Serralheria',v:'--g-serralheria'},{id:'Restaurante',v:'--g-restaurante'},{id:'Costura',v:'--g-costura'},{id:'Hotel',v:'--g-hotel'},{id:'Outro',v:'--g-outro'}];
 const TRACKS=['Rápida (tarefas simples)','Qualificada (tarefas avançadas)'];
 const CLOSED=['piloto','perdido'];
 const D0='2026-11-01';
@@ -291,7 +297,7 @@ const INFO={"carvalho": {"address": "Estr. dos Três Rios, 958 - 402 - Freguesia
 const DISCOVER=[{"id": "d-bubble-clean-lavanderia", "name": "Bubble Clean Lavanderia", "segment": "Lavanderia", "track": "R", "area": "Barra da Tijuca", "phone": "+55 21 97058-3023", "info": {"address": "Av. das Américas, 4200 - Bl 1, Sala 305 - Barra da Tijuca", "rating": 5.0, "reviews": 10, "hours": "Seg–Sex 8h–19h · Sáb 8h–16h", "placeId": "ChIJ_3GQtdXbmwAROFzx4vfcpwY"}}, {"id": "d-minha-lavanderia-recreio", "name": "Minha Lavanderia Recreio", "segment": "Lavanderia", "track": "R", "area": "Recreio dos Bandeirantes", "phone": "+55 21 96556-2077", "info": {"address": "Referência Absolutto Business Towers - Av. das Américas, 19005 - Recreio dos Bandeirantes", "rating": 4.7, "reviews": 101, "hours": "Seg–Sex 9h–18h · Sáb 9h–13h", "placeId": "ChIJs_YWu2_pmwARKvQ0FPqjd6A"}}, {"id": "d-lavanderio", "name": "LavandeRio", "segment": "Lavanderia", "track": "R", "area": "Copacabana", "phone": "+55 21 99717-6108", "info": {"address": "R. Francisco Sá, 51 - Lj 20 - Copacabana", "rating": 4.8, "reviews": 54, "hours": "Ter–Sáb 7h–22h", "placeId": "ChIJXwOtGXfVmwARBtzHyz2lRIU"}}, {"id": "d-dry-wash-lavanderia", "name": "Dry Wash Lavanderia", "segment": "Lavanderia", "track": "R", "area": "Barra da Tijuca", "phone": "+55 21 99317-3049", "info": {"address": "Av. das Américas, 2111 - Barra da Tijuca", "rating": 4.8, "reviews": 157, "hours": "Seg–Sex 8h–19h · Sáb 9h–16h", "placeId": "ChIJ4buuaKfQmwAR3WeQ8KgwZIo"}}, {"id": "d-lavanderia-santa-helena", "name": "Lavanderia Santa Helena", "segment": "Lavanderia", "track": "R", "area": "Jardim Botânico", "phone": "+55 21 2266-6189", "info": {"address": "R. Frei Leandro, 8 - Jardim Botânico", "rating": 3.5, "reviews": 46, "hours": "Seg–Sex 8h–18h · Sáb 8h–13h", "placeId": "ChIJLfjcrnvVmwARVBSQfaDGXsE"}}, {"id": "d-lavanderia-v3tex", "name": "Lavanderia V3tex", "segment": "Lavanderia", "track": "R", "area": "Imperial de São Cristóvão", "phone": "+55 21 3860-1361", "info": {"address": "R. Conde de Leopoldina, 380 - Imperial de São Cristóvão", "rating": 4.2, "reviews": 5, "hours": "", "placeId": "ChIJV_SBmt1-mQARNBnQasfvup8"}}, {"id": "d-tinturaria-so-cristvo", "name": "Tinturaria São Cristóvão", "segment": "Lavanderia", "track": "R", "area": "Imperial de São Cristóvão", "phone": "+55 21 2589-4062", "info": {"address": "R. São Cristóvão, 393 - Imperial de São Cristóvão", "rating": 5.0, "reviews": 3, "hours": "Seg–Sex 7h–17h · Sáb 7h–12h", "placeId": "ChIJo1BOHwB_mQARV6yt4ajbBZo"}}, {"id": "d-diamond-limpeza-terceirizada", "name": "Diamond Limpeza Terceirizada", "segment": "Limpeza", "track": "R", "area": "Pechincha", "phone": "+55 21 2135-2166", "info": {"address": "Rua Edgard Werneck, 1288 - Pechincha", "rating": 4.9, "reviews": 82, "hours": "Seg–Sex 9h–18h", "placeId": "ChIJYZ6YHLLZmwAR2Gg-Pawz3NE"}}, {"id": "d-shine-rio", "name": "Shine Rio", "segment": "Limpeza", "track": "R", "area": "Botafogo", "phone": "+55 21 3540-0693", "info": {"address": "Praia de Botafogo, 228 - Sl 1601 - Botafogo", "rating": 4.6, "reviews": 19, "hours": "Seg–Qui 8h–18h · Sex 8h–17h", "placeId": "ChIJ2a5qUyV7mQARh1vxeDx2zgI"}}, {"id": "d-premier-terceirizao-de-servios", "name": "Premier Terceirização de Serviços", "segment": "Limpeza", "track": "R", "area": "Tijuca", "phone": "+55 21 2268-6586", "info": {"address": "R. Pinheiro da Cunha, 185 - Tijuca", "rating": 4.2, "reviews": 40, "hours": "Seg–Sex 8h–18h", "placeId": "ChIJLYHiA__VmwARNjYCT1L9K9c"}}, {"id": "d-whitening-multiservios", "name": "Whitening Multiserviços", "segment": "Limpeza", "track": "R", "area": "Centro", "phone": "+55 21 2232-6749", "info": {"address": "Avenida Rio Branco, 120 - Grupo 607 - Salas: 02 e 03 - Centro", "rating": 4.0, "reviews": 29, "hours": "Seg–Sex 9h–18h", "placeId": "ChIJRbUI9V5_mQARSUfiTKUYW3c"}}, {"id": "d-v-clean", "name": "V&Clean", "segment": "Limpeza", "track": "R", "area": "Imperial de São Cristóvão", "phone": "+55 21 97863-1071", "info": {"address": "R. Bela, 368 - Imperial de São Cristóvão", "rating": 3.8, "reviews": 13, "hours": "Seg–Sex 7h–22h", "placeId": "ChIJAYvHYgR1mQARlfhqPj8_JgU"}}, {"id": "d-serralheria-decor", "name": "Serralheria Decor", "segment": "Serralheria", "track": "Q", "area": "Praça da Bandeira", "phone": "+55 21 2293-8362", "info": {"address": "Av. Paulo de Frontin, 503 - Praça da Bandeira", "rating": 4.9, "reviews": 288, "hours": "Seg–Sex 8h–18h · Sáb 8h–14h", "placeId": "ChIJsQfLrcJ_mQARbJyyWEXfAIU"}}, {"id": "d-serralheria-famlia-engenho-novo", "name": "Serralheria Família Engenho Novo", "segment": "Serralheria", "track": "Q", "area": "Engenho Novo", "phone": "+55 21 97676-9765", "info": {"address": "Rua Sousa Barros, 395 - Engenho Novo", "rating": 5.0, "reviews": 176, "hours": "Seg–Sex 9h–17h · Sáb 9h–14h", "placeId": "ChIJrW64Hjd9mQARHeE56InxuY4"}}, {"id": "d-rei-do-ferro-serralheria", "name": "Rei do ferro Serralheria", "segment": "Serralheria", "track": "Q", "area": "Copacabana", "phone": "+55 21 97724-2822", "info": {"address": "R. Barata Ribeiro - Copacabana", "rating": 4.7, "reviews": 24, "hours": "Todos os dias, 24h", "placeId": "ChIJEanp6Dt_mQARSi5y6xHsGbo"}}, {"id": "d-serralheria-novo-tempo", "name": "Serralheria Novo Tempo", "segment": "Serralheria", "track": "Q", "area": "Pilares", "phone": "+55 21 97613-3701", "info": {"address": "Av. João Ribeiro, 511 - Pilares", "rating": 4.8, "reviews": 58, "hours": "Seg–Sáb 7h–18h", "placeId": "ChIJx6zCvvF8mQARvIwQjxUkrSE"}}, {"id": "d-serralheria-jc-barreiros", "name": "Serralheria JC Barreiros", "segment": "Serralheria", "track": "Q", "area": "Olaria", "phone": "+55 21 3867-1058", "info": {"address": "A + D 30 anos no mercado - R. Leopoldina Rego, 430 - Olaria", "rating": 4.9, "reviews": 85, "hours": "Seg–Sex 8h–17h30 · Sáb 8h–13h", "placeId": "ChIJuVT0DO57mQARznkCiuUCkFM"}}, {"id": "d-auto-center-203", "name": "Auto Center 203", "segment": "Oficina", "track": "Q", "area": "Tijuca", "phone": "+55 21 99617-7076", "info": {"address": "R. Uruguai, 203 - Loja1 - Tijuca", "rating": 5.0, "reviews": 115, "hours": "Seg–Sex 8h–18h · Sáb 8h–12h", "placeId": "ChIJTWA_RwB_mQARtgIhrbtacyQ"}}, {"id": "d-ticar-auto-center", "name": "Éticar Auto Center", "segment": "Oficina", "track": "Q", "area": "Tijuca", "phone": "+55 21 98233-2312", "info": {"address": "R. Delgado de Carvalho, 13 - Tijuca", "rating": 4.8, "reviews": 116, "hours": "Seg–Ter 8h–18h · Qua–Sex 9h–17h · Sáb 8h–13h", "placeId": "ChIJ06WVTE5-mQAROxbnSg2PZzo"}}, {"id": "d-auto-tijuca-centro-automotivo", "name": "Auto Tijuca Centro Automotivo", "segment": "Oficina", "track": "Q", "area": "Tijuca", "phone": "+55 21 3647-0140", "info": {"address": "Rua Conde de Bonfim, 1259 - Tijuca", "rating": 4.5, "reviews": 272, "hours": "Seg–Sex 8h–12h", "placeId": "ChIJW8iMGQfWmwARQ1eprOXXj0U"}}, {"id": "d-haddock-car-service", "name": "Haddock Car Service", "segment": "Oficina", "track": "Q", "area": "Tijuca", "phone": "+55 21 3256-1393", "info": {"address": "R. Haddock Lobo, 191 - Tijuca", "rating": 4.4, "reviews": 378, "hours": "Seg–Sex 8h–18h · Sáb 8h–13h", "placeId": "ChIJF9Hkpax_mQARuDKGZtgsZ04"}}, {"id": "d-grupo-centro-automotivo-tijuca", "name": "Grupo Centro Automotivo - Tijuca", "segment": "Oficina", "track": "Q", "area": "Tijuca", "phone": "+55 21 3432-8858", "info": {"address": "R. Mariz e Barros, 591 - Tijuca", "rating": 4.2, "reviews": 122, "hours": "Seg–Sex 8h–18h · Sáb 8h–14h", "placeId": "ChIJW3qbQO1_mQARHF5jdGsZlE4"}}, {"id": "d-widmen-tijuca", "name": "Widmen Tijuca", "segment": "Oficina", "track": "Q", "area": "Andaraí", "phone": "+55 21 2461-0300", "info": {"address": "R. Uruguai, 260 - Andaraí", "rating": 4.9, "reviews": 6816, "hours": "Ter–Sex 8h–18h30 · Sáb 8h–13h30", "placeId": "ChIJNXd5ge9_mQARk67x3ghoX50"}}, {"id": "d-barra-sul-auto-center", "name": "Barra Sul Auto Center", "segment": "Oficina", "track": "Q", "area": "Barra da Tijuca", "phone": "+55 21 2493-9995", "info": {"address": "Estrada da Barra da Tijuca, 70 - Barra da Tijuca", "rating": 4.5, "reviews": 97, "hours": "Seg–Sex 8h–17h30", "placeId": "ChIJaa8rQ9rQmwARkIbbc010fQA"}}, {"id": "d-widmen-barra", "name": "Widmen Barra", "segment": "Oficina", "track": "Q", "area": "Barra da Tijuca", "phone": "+55 21 2461-0300", "info": {"address": "Av. das Américas, 4183 - Barra da Tijuca", "rating": 4.9, "reviews": 11757, "hours": "Ter–Sex 8h–18h30 · Sáb 8h–13h45", "placeId": "ChIJZVeECEfamwARLyRyTtcKFy4"}}, {"id": "d-grupo-centro-automotivo-barra-da-tijuca", "name": "Grupo Centro Automotivo - Barra da Tijuca", "segment": "Oficina", "track": "Q", "area": "Barra da Tijuca", "phone": "+55 21 3432-8858", "info": {"address": "Av. das Américas, 5150 - Lj 31 - Barra da Tijuca", "rating": 4.7, "reviews": 338, "hours": "Seg–Sex 8h–18h · Sáb 8h–13h", "placeId": "ChIJcyq5xSjbmwARE2NbL4tdDoI"}}, {"id": "d-home-mechanic-rj", "name": "Home Mechanic RJ", "segment": "Oficina", "track": "Q", "area": "Barra da Tijuca", "phone": "+55 21 99989-5969", "info": {"address": "R. Joathur Bueno, 152 - Barra da Tijuca", "rating": 4.9, "reviews": 106, "hours": "Seg–Sex 8h–18h", "placeId": "ChIJ98xvlnvbmwARFJwcM9JYndE"}}, {"id": "d-dinamicar-pneus", "name": "Dinamicar Pneus", "segment": "Oficina", "track": "Q", "area": "Barra da Tijuca", "phone": "+55 21 3030-0033", "info": {"address": "Av. das Américas, 4059 - Barra da Tijuca", "rating": 4.5, "reviews": 3020, "hours": "Seg–Sex 8h–19h · Sáb 8h–14h", "placeId": "ChIJfToy_Vl5mQAR-sM_NzIUMBU"}}, {"id": "d-marcenaria-renascer", "name": "Marcenaria Renascer", "segment": "Marcenaria", "track": "Q", "area": "Taquara", "phone": "+55 21 96439-3430", "info": {"address": "Estr. Mapuá, 230 - Lj A - Taquara", "rating": 4.8, "reviews": 9, "hours": "Seg–Sex 9h–19h", "placeId": "ChIJ49QEwb7ZmwAR6cDpiTfyTjs"}}, {"id": "d-ej-marcenaria", "name": "EJ marcenaria", "segment": "Marcenaria", "track": "Q", "area": "Jacarepaguá", "phone": "+55 21 97534-4372", "info": {"address": "Estr. de Jacarepaguá, 4546 - Jacarepaguá", "rating": 5.0, "reviews": 3, "hours": "Seg–Sáb 8h–12h", "placeId": "ChIJgWX2oYcFpWgRwbS-lvWyG0A"}}, {"id": "d-multi-marcenaria", "name": "Multi Marcenaria", "segment": "Marcenaria", "track": "Q", "area": "Anil", "phone": "+55 21 98353-1903", "info": {"address": "Av. Afonso da Silveira Filho, 630 - Lj B - Anil", "rating": 5.0, "reviews": 29, "hours": "Seg–Sex 8h–19h · Sáb 8h–14h", "placeId": "ChIJkQaxNTLZmwARuPAt3cFMyX4"}}, {"id": "d-art-e-forma-marcenaria", "name": "Art e Forma Marcenaria", "segment": "Marcenaria", "track": "Q", "area": "Curicica", "phone": "+55 21 99304-3028", "info": {"address": "R. André Rocha - Curicica", "rating": 5.0, "reviews": 2, "hours": "Todos os dias, 8h–22h", "placeId": "ChIJ63dFvejZmwAR4Wege4-snn0"}}, {"id": "d-marcenaria-aviva", "name": "Marcenaria Aviva", "segment": "Marcenaria", "track": "Q", "area": "Barra Olímpica", "phone": "+55 21 96427-5579", "info": {"address": "Av. Jaime Poggi, 99 - Barra Olímpica", "rating": 5.0, "reviews": 46, "hours": "Seg–Sex 9h–17h · Sáb 9h–14h", "placeId": "ChIJT8Pw3QoZ3k8R2sjr_54xh9I"}}, {"id": "d-tompson-engenharia", "name": "Tompson Engenharia", "segment": "Construção", "track": "Q", "area": "Pavuna", "phone": "+55 21 96878-0800", "info": {"address": "R. Caçapava do Sul, 333 - Pavuna", "rating": 4.8, "reviews": 18, "hours": "Todos os dias, 8h–22h", "placeId": "ChIJ2Wouh4N_mQARiqZl5BiMR3s"}}, {"id": "d-dn-reformas4", "name": "Dn.Reformas4", "segment": "Construção", "track": "Q", "area": "Botafogo", "phone": "+55 21 98936-5014", "info": {"address": "R. Mal. Francisco de Moura, 72 - Botafogo", "rating": 5.0, "reviews": 193, "hours": "Seg–Sáb 24h", "placeId": "ChIJcdDC2Hx_mQARicoVB37PU0U"}}, {"id": "d-rc-reforma-e-construo", "name": "RC Reforma e Construção", "segment": "Construção", "track": "Q", "area": "Botafogo", "phone": "+55 21 99765-3578", "info": {"address": "R. Voluntários da Pátria, 261 - Loja: 17 - Botafogo", "rating": 5.0, "reviews": 18, "hours": "Ter–Dom 24h", "placeId": "ChIJ3SZzOyh_mQAR7mRciQC2DBA"}}, {"id": "d-mab-construo-e-reforma", "name": "Mab Construção e Reforma", "segment": "Construção", "track": "Q", "area": "Botafogo", "phone": "+55 21 97543-9162", "info": {"address": "R. Voluntários da Pátria, 261 - Loja: 25 - Botafogo", "rating": 5.0, "reviews": 24, "hours": "Ter–Sex 9h–19h · Sáb 9h–14h", "placeId": "ChIJ8domPoV_mQARG-qP_AY89M4"}}, {"id": "d-igp-construo-e-reforma", "name": "IGP Construção e Reforma", "segment": "Construção", "track": "Q", "area": "Rio Comprido", "phone": "+55 21 98504-6625", "info": {"address": "R. Citiso, 132 - Rio Comprido", "rating": 5.0, "reviews": 13, "hours": "Seg–Sex 8h–17h · Sáb 8h–12h", "placeId": "ChIJkTCk5R5_mQARBRASsAIqC-8"}}, {"id": "d-marmitas-da-lulu", "name": "Marmitas da Lulu", "segment": "Restaurante", "track": "R", "area": "Colônia", "phone": "+55 21 98368-6477", "info": {"address": "R. Nossa Sra. dos Remédios, 1 - Colônia", "rating": 5.0, "reviews": 101, "hours": "Todos os dias, 24h", "placeId": "ChIJWRnryL7ZmwARFGmlxY70AG0"}}, {"id": "d-congelados-da-snia", "name": "Congelados da Sônia", "segment": "Restaurante", "track": "R", "area": "Benfica", "phone": "+55 21 99518-7404", "info": {"address": "R. São Luiz Gonzaga, 2063 - Benfica", "rating": 4.4, "reviews": 114, "hours": "Ter–Dom 24h", "placeId": "ChIJG6EK5ZF-mQARa-3ls3Gjr4g"}}, {"id": "d-blessed-cozinha-prime", "name": "Blessed Cozinha Prime", "segment": "Restaurante", "track": "R", "area": "Rio Comprido", "phone": "+55 21 96427-7920", "info": {"address": "R. do Matoso, 241 - Rio Comprido", "rating": 5.0, "reviews": 110, "hours": "Seg–Sex 9h–17h", "placeId": "ChIJZaMlAWV_mQAR1Pca-1p_-wc"}}, {"id": "d-casa-d-ary", "name": "Casa D'Ary", "segment": "Restaurante", "track": "R", "area": "Recreio dos Bandeirantes", "phone": "+55 21 98910-2553", "info": {"address": "R. Roberval Cordeiro de Farias, 440 - Lj c - Recreio dos Bandeirantes", "rating": 4.8, "reviews": 277, "hours": "Seg–Sex 8h–19h · Sáb 9h–15h30", "placeId": "ChIJl1vRme7dmwAR3qQR-6ygaeE"}}, {"id": "d-atelier-cochic", "name": "Atelier Cochic", "segment": "Costura", "track": "Q", "area": "Marechal Hermes", "phone": "+55 21 96574-4694", "info": {"address": "R. Latife Luvizaro, 120 - Lj D - Marechal Hermes", "rating": 4.7, "reviews": 104, "hours": "Seg–Sex 9h–19h · Sáb 9h–13h", "placeId": "ChIJaYgria1jmQAReaw3aLr50Sc"}}, {"id": "d-linhas-e-agulhas-atelier", "name": "Linhas e Agulhas Atelier", "segment": "Costura", "track": "Q", "area": "Centro", "phone": "+55 21 99194-8030", "info": {"address": "Galeria do Comércio - R. Gonçalves Dias, 40 - Sobreloja 4 - Centro", "rating": 5.0, "reviews": 143, "hours": "Seg–Sex 10h–18h", "placeId": "ChIJp_h66P9_mQARr0hzRW8H-Ns"}}, {"id": "d-cia-da-costura", "name": "Cia da Costura", "segment": "Costura", "track": "Q", "area": "Campo Grande", "phone": "+55 21 98681-8392", "info": {"address": "R. Barcelos Domingos, 33 - Lj N⁰ 2 - Campo Grande", "rating": 4.7, "reviews": 72, "hours": "Seg–Sex 9h–19h · Sáb 9h–16h", "placeId": "ChIJGw4qw1fhmwARKlkWLnU_HOw"}}, {"id": "d-r-j-construes-e-reformas", "name": "R&J Construções e Reformas", "segment": "Construção", "track": "Q", "area": "Engenho da Rainha", "phone": "+55 21 97968-4157", "info": {"address": "R. Ferreira de Menezes, 70 - Engenho da Rainha", "rating": 5.0, "reviews": 4, "hours": "Todos os dias, 24h", "placeId": "ChIJHdVyvPZ8mQARfkkQDqVo-4E"}}, {"id": "d-my-loft-engenharia", "name": "My Loft Engenharia", "segment": "Construção", "track": "Q", "area": "Lapa", "phone": "+55 21 96464-9190", "info": {"address": "R. da Lapa, 180 - Sl 1101 - Lapa", "rating": 5.0, "reviews": 34, "hours": "Todos os dias, 9h–18h", "placeId": "ChIJKR1EDULS82QR2EdCkx_31tk"}}, {"id": "d-graal-marcenaria", "name": "Graal Marcenaria", "segment": "Marcenaria", "track": "Q", "area": "Joá", "phone": "+55 21 99868-0606", "info": {"address": "R. Maria Luíza Pitanga, 45 - Lj E - Joá", "rating": 5.0, "reviews": 49, "hours": "Seg–Sex 9h–21h · Sáb 10h–16h", "placeId": "ChIJ4TEBPp3RmwARQBL1kE1zksU"}}, {"id": "d-essencial-mveis-marcenaria", "name": "Essencial Móveis (Marcenaria)", "segment": "Marcenaria", "track": "Q", "area": "Barra da Tijuca", "phone": "+55 21 97962-8994", "info": {"address": "Av. das Américas, 7380 - Barra da Tijuca", "rating": 4.9, "reviews": 33, "hours": "Seg–Sex 9h–17h", "placeId": "ChIJ2Ucs-WkzngARB93vpXNIWtU"}}, {"id": "d-oficina-cw-car", "name": "Oficina CW Car", "segment": "Oficina", "track": "Q", "area": "Curicica", "phone": "+55 21 97512-2577", "info": {"address": "Praça do Bandolim, 2 - Curicica", "rating": 5.0, "reviews": 54, "hours": "Seg–Sex 8h–18h · Sáb 8h30–12h", "placeId": "ChIJkSD8YyTZmwARdt6LJcLi62g"}}, {"id": "d-an-restauraes", "name": "AN Restaurações", "segment": "Oficina", "track": "Q", "area": "Curicica", "phone": "+55 21 99884-5606", "info": {"address": "Rua Herveira, 07 - Curicica", "rating": 5.0, "reviews": 28, "hours": "Seg–Sex 8h30–18h · Sáb 8h30–14h", "placeId": "ChIJaaS9MU_ZmwAR2LDiBw-BT0w"}}, {"id": "d-shopping-dos-parachoques", "name": "Shopping dos Parachoques", "segment": "Oficina", "track": "Q", "area": "Cacuia", "phone": "+55 21 96416-2090", "info": {"address": "Estr. da Cacuia, 830 - Cacuia", "rating": 4.7, "reviews": 410, "hours": "Todos os dias, 6h–23h", "placeId": "ChIJAQDNKeR3mQAR248VTDTQ2e4"}}, {"id": "d-lavamax-lavanderia", "name": "Lavamax Lavanderia", "segment": "Lavanderia", "track": "R", "area": "Barra Olímpica", "phone": "+55 21 97718-1520", "info": {"address": "Av. Vice Pres. José Alencar, 1400 - Barra Olímpica", "rating": 4.7, "reviews": 15, "hours": "Todos os dias, 7h–21h", "placeId": "ChIJffs01QLZmwARlK291g2vZ9A"}}, {"id": "d-lave-pegue-prado-jnior", "name": "Lave & Pegue Prado Júnior", "segment": "Lavanderia", "track": "R", "area": "Copacabana", "phone": "+55 21 97178-9177", "info": {"address": "Av. Prado Júnior, 145 - Copacabana", "rating": 4.3, "reviews": 137, "hours": "Todos os dias, 24h", "placeId": "ChIJK5bdWc1_mQARwO-mgn9JLgc"}}, {"id": "d-vgs-solues-em-facilities", "name": "VGS Soluções em Facilities", "segment": "Limpeza", "track": "R", "area": "Pilares", "phone": "+55 21 3507-1215", "info": {"address": "Av. Dom Hélder Câmara, 6644 - Sl 724 - Pilares", "rating": 5.0, "reviews": 4, "hours": "Seg–Sex 8h–17h", "placeId": "ChIJVybB1Bl9mQAR31nMCNi6Xsc"}}];
 for(const l of SEED.leads)if(INFO[l.id])l.info=INFO[l.id];
 let DB=load();
-function load(){try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);if(d&&Array.isArray(d.leads)&&Array.isArray(d.tpls)){if((d.tplV||1)<SEED.tplV){for(const t of SEED.tpls){const i=d.tpls.findIndex(x=>x.id===t.id);if(i>=0)d.tpls[i]={...t};else d.tpls.push({...t});}d.tplV=SEED.tplV;}if((d.dataV||1)<SEED.dataV){for(const l of d.leads)if(!l.info&&INFO[l.id])l.info=INFO[l.id];d.dataV=SEED.dataV;}if(!Array.isArray(d.hidden))d.hidden=[];return d;}}}catch(e){}return structuredClone(SEED);}
+function load(){try{const raw=localStorage.getItem(KEY);if(raw){const d=JSON.parse(raw);if(d&&Array.isArray(d.leads)&&Array.isArray(d.tpls)){if((d.tplV||1)<SEED.tplV){for(const t of SEED.tpls){const i=d.tpls.findIndex(x=>x.id===t.id);if(i>=0)d.tpls[i]={...t};else d.tpls.push({...t});}d.tplV=SEED.tplV;}if((d.dataV||1)<SEED.dataV){for(const l of d.leads)if(!l.info&&INFO[l.id])l.info=INFO[l.id];d.dataV=SEED.dataV;}if(!Array.isArray(d.hidden))d.hidden=[];d.leads=d.leads.filter(l=>!(l.name==='Nova empresa'&&!l.phone&&!l.contact&&!l.notes&&(l.history||[]).length<=1));return d;}}}catch(e){}return structuredClone(SEED);}
 let saveWarned=false;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(DB));}catch(e){if(!saveWarned){saveWarned=true;toast('Não consegui salvar neste navegador');}}}
 
@@ -335,13 +341,13 @@ function renderHeader(){
 }
 function renderChips(){
   const sc=document.getElementById('stage-chips');sc.replaceChildren();
-  const mk=(id,label,n,color)=>h('button',{class:'chip',type:'button','aria-pressed':String(UI.filter===id),onclick:()=>{UI.filter=UI.filter===id&&id!=='all'?'all':id;renderLeads();}},color?h('span',{class:'dot',style:'background:var('+color+')'}):null,label,h('span',{class:'c',text:n}));
+  const mk=(id,label,n,color)=>h('button',{class:'chip',type:'button','aria-pressed':String(UI.filter===id),onclick:()=>{UI.filter=UI.filter===id&&id!=='all'?'all':id;renderLeads();}},label,h('span',{class:'c',text:n}));
   sc.append(mk('all','Todos',DB.leads.length));
   for(const s of STAGES)sc.append(mk(s.id,s.label,DB.leads.filter(l=>(l.stage||'novo')===s.id).length,'--s-'+s.id));
   const gc=document.getElementById('seg-chips');gc.replaceChildren();
   const used=SEGS.filter(s=>DB.leads.some(l=>l.segment===s.id));
   gc.append(h('button',{class:'chip',type:'button','aria-pressed':String(!UI.seg),onclick:()=>{UI.seg='';renderLeads();}},'Todos os segmentos'));
-  for(const s of used)gc.append(h('button',{class:'chip',type:'button','aria-pressed':String(UI.seg===s.id),onclick:()=>{UI.seg=UI.seg===s.id?'':s.id;renderLeads();}},h('span',{class:'dot',style:'background:var('+s.v+')'}),s.id));
+  for(const s of used)gc.append(h('button',{class:'chip',type:'button','aria-pressed':String(UI.seg===s.id),onclick:()=>{UI.seg=UI.seg===s.id?'':s.id;renderLeads();}},s.id));
 }
 function visible(){const q=UI.q.trim().toLowerCase();return DB.leads.filter(l=>{
   const st=l.stage||'novo';
@@ -362,9 +368,10 @@ function renderList(){
       avatar(l),
       h('span',{class:'nm',text:l.name||'Sem nome'}),
       h('span',{class:'side'},
-        h('span',{class:'stage-tag'},h('span',{class:'dot',style:'background:var(--s-'+st.id+')'}),st.label),
+        h('span',{class:'stage-tag',style:'--sc:var(--s-'+st.id+')'},st.label),
         due?h('span',{class:'due',text:due==='late'?'Atrasado '+fmt(l.next):'Hoje'}):(l.next&&!CLOSED.includes(l.stage)?h('span',{class:'due calm',text:fmt(l.next)}):null)),
-      h('span',{class:'sub',text:[l.area,l.segment].filter(Boolean).join(' · ')||'—'}))));
+      h('span',{class:'sub',text:[l.area,l.segment].filter(Boolean).join(' · ')||'—'}),
+      (l.info&&(l.info.rating||l.info.hours))?h('span',{class:'sub meta2',text:[stars(l.info),l.info.hours].filter(Boolean).join('  ·  ')}):(l.phone?h('span',{class:'sub meta2 mono',text:l.phone}):null))));
   }
 }
 function renderLeads(){renderHeader();renderChips();renderList();renderDiscCount();}
@@ -377,7 +384,6 @@ document.getElementById('k-open').addEventListener('click',()=>{UI.filter=UI.fil
 const mapsUrl=l=>{const i=l.info||{};return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent((l.name||'')+', '+(i.address||l.area||'Rio de Janeiro'))+(i.placeId?'&query_place_id='+encodeURIComponent(i.placeId):'');};
 const googleUrl=l=>'https://www.google.com/search?q='+encodeURIComponent((l.name||'')+' '+(l.area||'')+' Rio de Janeiro');
 const stars=i=>i&&i.rating?'★ '+String(i.rating).replace('.',',')+(i.reviews?' · '+i.reviews+' avaliações':''):'';
-const SEARCH_TERMS=[['Lavanderia','lavanderia industrial'],['Limpeza','empresa de limpeza terceirizada'],['Oficina','oficina mecânica'],['Marcenaria','marcenaria'],['Serralheria','serralheria'],['Construção','construtora reformas'],['Restaurante','cozinha industrial'],['Costura','confecção costura'],['Hotel','hotel']];
 UI.mode='mine';UI.dseg='';
 function discAvail(){const have=new Set(DB.leads.map(l=>l.id)),hid=new Set(DB.hidden||[]);return DISCOVER.filter(d=>!have.has(d.id)&&!hid.has(d.id));}
 function renderDiscCount(){const n=discAvail().length;document.getElementById('disc-n').textContent=n?String(n):'';}
@@ -385,39 +391,98 @@ function renderDisc(){
   const all=discAvail();renderDiscCount();
   const ch=document.getElementById('disc-chips');ch.replaceChildren();
   ch.append(h('button',{class:'chip',type:'button','aria-pressed':String(!UI.dseg),onclick:()=>{UI.dseg='';renderDisc();}},'Todos',h('span',{class:'c',text:all.length})));
-  for(const s of SEGS){const n=all.filter(d=>d.segment===s.id).length;if(!n)continue;ch.append(h('button',{class:'chip',type:'button','aria-pressed':String(UI.dseg===s.id),onclick:()=>{UI.dseg=UI.dseg===s.id?'':s.id;renderDisc();}},h('span',{class:'dot',style:'background:var('+s.v+')'}),s.id,h('span',{class:'c',text:n})));}
+  for(const s of SEGS){const n=all.filter(d=>d.segment===s.id).length;if(!n)continue;ch.append(h('button',{class:'chip',type:'button','aria-pressed':String(UI.dseg===s.id),onclick:()=>{UI.dseg=UI.dseg===s.id?'':s.id;renderDisc();}},s.id,h('span',{class:'c',text:n})));}
   const el=document.getElementById('disc-list');el.replaceChildren();
   const items=all.filter(d=>!UI.dseg||d.segment===UI.dseg).sort((a,b)=>(b.info.reviews||0)-(a.info.reviews||0));
   if(!items.length)el.append(h('li',{class:'empty',text:'Você já adicionou todas as empresas daqui. Use a busca no Google Maps abaixo ou peça mais ao Claude.'}));
   for(const d of items){el.append(h('li',{class:'dcard'},avatar(d),
     h('div',{style:'min-width:0'},h('div',{class:'nm',text:d.name}),h('div',{class:'sub',text:[d.area,d.segment].filter(Boolean).join(' · ')}),h('div',{class:'sub',text:[stars(d.info),d.info.hours].filter(Boolean).join('  ·  ')})),
     h('div',{class:'acts'},h('a',{class:'btn sm',href:mapsUrl(d),target:'_blank',rel:'noopener'},'Ver no Maps'),h('button',{class:'btn sm',type:'button',onclick:()=>{(DB.hidden=DB.hidden||[]).push(d.id);save();renderDisc();toast('Ocultado');}},'Ocultar'),h('span',{class:'grow'}),
-      h('button',{class:'btn sm primary',type:'button',onclick:()=>{DB.leads.push({id:d.id,name:d.name,segment:d.segment,track:d.track==='R'?R:Q,area:d.area,contact:'',phone:d.phone,stage:'novo',last:'',next:'',notes:'',info:d.info,history:[{d:today(),t:'Adicionado pelo Descobrir'}]});save();renderDisc();toast(d.name+' adicionado');}},'+ Adicionar'))));}
-  renderMapsLinks();
+      h('button',{class:'btn sm primary',type:'button',onclick:()=>{addFrom(d,'Adicionado pelo Descobrir');renderDisc();}},'+ Adicionar'))));}
 }
-function renderMapsLinks(){const b=document.getElementById('bairro').value.trim();const el=document.getElementById('maps-links');el.replaceChildren();
-  for(const [label,term] of SEARCH_TERMS)el.append(h('a',{class:'chip',href:'https://www.google.com/maps/search/'+encodeURIComponent(term+' '+(b?b+' ':'')+'Rio de Janeiro'),target:'_blank',rel:'noopener'},label));}
-document.getElementById('bairro').addEventListener('input',renderMapsLinks);
 function setMode(m){UI.mode=m;document.getElementById('mode-mine').setAttribute('aria-pressed',String(m==='mine'));document.getElementById('mode-disc').setAttribute('aria-pressed',String(m==='disc'));
-  document.getElementById('mine-view').hidden=m!=='mine';document.getElementById('disc-view').hidden=m!=='disc';if(m==='disc')renderDisc();else renderLeads();}
+  document.getElementById('mine-view').hidden=m!=='mine';document.getElementById('disc-view').hidden=m!=='disc';document.getElementById('fab').hidden=m==='disc';if(m==='disc')renderDisc();else renderLeads();}
 document.getElementById('mode-mine').addEventListener('click',()=>setMode('mine'));
 document.getElementById('mode-disc').addEventListener('click',()=>setMode('disc'));
+
+/* ================= finder (OpenStreetMap) ================= */
+const FTYPES=[
+ {id:'Lavanderia',seg:'Lavanderia',term:'lavanderia',q:['nwr["shop"~"^(laundry|dry_cleaning)$"]']},
+ {id:'Limpeza',seg:'Limpeza',term:'empresa de limpeza terceirizada',q:['nwr["office"]["name"~"limpeza|facilities|conserva|higieniza",i]','nwr["shop"]["name"~"limpeza|facilities|conserva",i]','nwr["craft"="cleaning"]','nwr["office"="cleaning"]']},
+ {id:'Oficina',seg:'Oficina',term:'oficina mecânica',q:['nwr["shop"~"^(car_repair|tyres|motorcycle_repair)$"]','nwr["craft"="car_repair"]']},
+ {id:'Marcenaria',seg:'Marcenaria',term:'marcenaria',q:['nwr["craft"~"^(carpenter|joiner|cabinet_maker)$"]','nwr["name"~"marcenaria|marceneiro",i]']},
+ {id:'Serralheria',seg:'Serralheria',term:'serralheria',q:['nwr["craft"~"^(metal_construction|blacksmith|welder)$"]','nwr["name"~"serralheria",i]']},
+ {id:'Construção',seg:'Construção',term:'construtora reformas',q:['nwr["craft"~"^(builder|plasterer|tiler|painter|electrician|plumber)$"]','nwr["office"="construction_company"]','nwr["name"~"construtora|reformas",i]']},
+ {id:'Cozinha',seg:'Restaurante',term:'cozinha industrial marmitas',q:['nwr["amenity"]["name"~"marmita|cozinha industrial|refei[cç]|congelados",i]','nwr["shop"]["name"~"marmita|congelados",i]']},
+ {id:'Costura',seg:'Costura',term:'confecção costura',q:['nwr["craft"~"^(tailor|dressmaker|upholsterer)$"]','nwr["shop"~"^(tailor|sewing)$"]','nwr["name"~"costura|confec",i]']},
+ {id:'Hotel',seg:'Hotel',term:'hotel',q:['nwr["tourism"~"^(hotel|hostel|guest_house)$"]']}];
+const OVERPASS=['https://overpass-api.de/api/interpreter','https://overpass.private.coffee/api/interpreter'];
+const F={type:'Lavanderia',results:[],busy:false};
+const R_SEGS=['Lavanderia','Limpeza','Restaurante','Hotel'];
+function osmHours(oh){if(!oh)return '';if(/24\/7/.test(oh))return 'Todos os dias, 24h';const D={Mo:'Seg',Tu:'Ter',We:'Qua',Th:'Qui',Fr:'Sex',Sa:'Sáb',Su:'Dom',PH:'Feriados'};
+  return oh.replace(/\b(Mo|Tu|We|Th|Fr|Sa|Su|PH)\b/g,m=>D[m]).replace(/(\d{1,2}):(\d{2})/g,(m,h,mi)=>String(+h)+'h'+(mi==='00'?'':mi)).replace(/-/g,'–').replace(/;\s*/g,' · ').replace(/\boff\b/g,'fechado');}
+function capWords(t){return t.replace(/\S+/g,w=>w.length>2?w[0].toUpperCase()+w.slice(1):w);}
+async function geocode(bairro){
+  const u='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&countrycodes=br&accept-language=pt-BR&q='+encodeURIComponent(bairro+', Rio de Janeiro, RJ');
+  const r=await fetch(u);if(!r.ok)throw new Error('geo');const j=await r.json();if(!j.length)return null;
+  const b=j[0].boundingbox.map(Number);let [S,N,W,E]=b;const cy=(S+N)/2,cx=(W+E)/2;
+  let hy=Math.min(Math.max((N-S)/2,0.009),0.035),hx=Math.min(Math.max((E-W)/2,0.009),0.035);
+  return {S:cy-hy,N:cy+hy,W:cx-hx,E:cx+hx,label:(j[0].display_name||bairro).split(',')[0]};}
+async function overpass(q){let last;for(const url of OVERPASS){try{const r=await fetch(url,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:'data='+encodeURIComponent(q)});if(r.ok)return await r.json();last=new Error('http '+r.status);}catch(e){last=e;}}throw last||new Error('overpass');}
+function parseOSM(json,type,bairro){const seen=new Set(),out=[];
+  for(const el of (json.elements||[])){const t=el.tags||{};if(!t.name)continue;const key=t.name.trim().toLowerCase();if(seen.has(key))continue;seen.add(key);
+    const street=[t['addr:street'],t['addr:housenumber']].filter(Boolean).join(', ');const sub=t['addr:suburb']||t['addr:neighbourhood']||'';
+    out.push({id:'osm-'+el.type+'-'+el.id,name:t.name.trim(),segment:type.seg,track:R_SEGS.includes(type.seg)?R:Q,area:sub||capWords(bairro),
+      phone:t.phone||t['contact:phone']||t['contact:whatsapp']||t.mobile||t['contact:mobile']||'',
+      info:{address:[street,sub].filter(Boolean).join(' - '),hours:osmHours(t.opening_hours),website:t.website||t['contact:website']||'',instagram:t['contact:instagram']||'',source:'OpenStreetMap'}});}
+  return out.sort((a,b)=>(b.phone?1:0)-(a.phone?1:0)||(b.info.address?1:0)-(a.info.address?1:0)||a.name.localeCompare(b.name,'pt'));}
+function fStatus(t){document.getElementById('f-status').textContent=t;}
+function gmapsSearch(){const b=document.getElementById('f-bairro').value.trim();const t=FTYPES.find(x=>x.id===F.type);return 'https://www.google.com/maps/search/'+encodeURIComponent(t.term+' '+(b?b+' ':'')+'Rio de Janeiro');}
+function renderFinderTypes(){const el=document.getElementById('f-types');el.replaceChildren();
+  for(const t of FTYPES){const sg=segOf(t.seg);el.append(h('button',{class:'chip',type:'button','aria-pressed':String(F.type===t.id),onclick:()=>{F.type=t.id;renderFinderTypes();}},t.id));}
+  document.getElementById('f-gmaps').href=gmapsSearch();}
+function renderFinderResults(){const el=document.getElementById('f-results');el.replaceChildren();const have=new Set(DB.leads.map(l=>l.id));
+  for(const d of F.results){const added=have.has(d.id);el.append(h('li',{class:'dcard'},avatar(d),
+    h('div',{style:'min-width:0'},h('div',{class:'nm',text:d.name}),h('div',{class:'sub',text:d.info.address||d.area}),
+      h('div',{class:'sub',text:[d.phone,d.info.hours].filter(Boolean).join('  ·  ')||'Sem telefone no mapa'})),
+    h('div',{class:'acts'},h('a',{class:'btn sm',href:mapsUrl(d),target:'_blank',rel:'noopener'},'Ver no Maps'),h('span',{class:'grow'}),
+      added?h('button',{class:'btn sm',type:'button',disabled:true},'Adicionado'):h('button',{class:'btn sm primary',type:'button',onclick:()=>{addFrom(d,'Adicionado pela busca');renderFinderResults();}},'+ Adicionar'))));}}
+function addFrom(d,log){if(DB.leads.some(l=>l.id===d.id))return;DB.leads.push({id:d.id,name:d.name,segment:d.segment,track:typeof d.track==='string'&&d.track.length>1?d.track:(d.track==='R'?R:Q),area:d.area,contact:'',phone:d.phone,stage:'novo',last:'',next:'',notes:'',info:d.info,history:[{d:today(),t:log}]});save();renderDiscCount();toast(d.name+' adicionado');}
+async function runFinder(){if(F.busy)return;const bairro=document.getElementById('f-bairro').value.trim();
+  if(!bairro){fStatus('Digite um bairro para buscar.');document.getElementById('f-bairro').focus();return;}
+  if(!navigator.onLine){fStatus('Sem internet agora. Tente de novo quando estiver conectado.');return;}
+  const t=FTYPES.find(x=>x.id===F.type);F.busy=true;const go=document.getElementById('f-go');go.disabled=true;go.textContent='Buscando…';F.results=[];renderFinderResults();
+  try{fStatus('Localizando '+bairro+'…');const box=await geocode(bairro);
+    if(!box){fStatus('Não achei o bairro "'+bairro+'". Confira o nome e tente de novo.');return;}
+    fStatus('Procurando '+t.id.toLowerCase()+' em '+box.label+'…');
+    const bb='('+[box.S,box.W,box.N,box.E].map(v=>v.toFixed(5)).join(',')+')';
+    const q='[out:json][timeout:25];('+t.q.map(x=>x+bb+';').join('')+');out center tags 80;';
+    F.results=parseOSM(await overpass(q),t,bairro);renderFinderResults();
+    fStatus(F.results.length?('Encontrei '+F.results.length+' em '+box.label+'. As que têm telefone aparecem primeiro.'):('Não encontrei '+t.id.toLowerCase()+' em '+box.label+' no mapa aberto. Tente um bairro vizinho ou abra a busca no Google Maps.'));
+  }catch(e){fStatus('A busca não respondeu agora. Tente de novo em alguns segundos ou use o Google Maps.');}
+  finally{F.busy=false;go.disabled=false;go.textContent='Buscar';document.getElementById('f-gmaps').href=gmapsSearch();}}
+document.getElementById('f-go').addEventListener('click',runFinder);
+document.getElementById('f-bairro').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();e.target.blur();runFinder();}});
+document.getElementById('f-bairro').addEventListener('input',()=>{document.getElementById('f-gmaps').href=gmapsSearch();});
+document.getElementById('f-manual').addEventListener('click',newManual);
+renderFinderTypes();
 
 /* ================= lead sheet ================= */
 const sheet=document.getElementById('sheet');
 function openLead(id,push=true){UI.sel=id;UI.tpl=null;UI.draft=null;UI.arm=null;renderSheet();sheet.hidden=false;sheet.scrollTop=0;document.body.style.overflow='hidden';if(push)try{history.pushState({lead:id},'');}catch(e){}}
-function closeLead(fromPop){if(sheet.hidden)return;sheet.hidden=true;document.body.style.overflow='';UI.sel=null;renderLeads();if(!fromPop)try{if(history.state&&history.state.lead)history.back();}catch(e){}}
+function closeLead(fromPop){if(sheet.hidden)return;const cur=lead();if(isBlank(cur)){DB.leads=DB.leads.filter(x=>x!==cur);save();}sheet.hidden=true;document.body.style.overflow='';UI.sel=null;renderLeads();if(!fromPop)try{if(history.state&&history.state.lead)history.back();}catch(e){}}
 window.addEventListener('popstate',()=>closeLead(true));
 function lead(){return DB.leads.find(l=>l.id===UI.sel);}
 function setField(k,v){const l=lead();if(!l)return;if(l[k]===v)return;l[k]=v;save();}
 
 function aboutPanel(l){const i=l.info||{};
   return h('div',{class:'panel'},h('h3',{text:'Sobre a empresa'}),
-    (i.address||i.rating||i.hours||l.phone)?h('dl',{class:'facts'},
+    (i.address||i.rating||i.hours||l.phone||i.website)?h('dl',{class:'facts'},
       i.address?[h('dt',{text:'Endereço'}),h('dd',{text:i.address})]:null,
       i.rating?[h('dt',{text:'Google'}),h('dd',{text:stars(i)})]:null,
       i.hours?[h('dt',{text:'Horário'}),h('dd',{text:i.hours})]:null,
-      l.phone?[h('dt',{text:'Telefone'}),h('dd',{class:'mono',text:l.phone})]:null):null,
+      l.phone?[h('dt',{text:'Telefone'}),h('dd',{class:'mono',text:l.phone})]:null,
+      i.website?[h('dt',{text:'Site'}),h('dd',null,h('a',{href:/^https?:/.test(i.website)?i.website:'https://'+i.website,target:'_blank',rel:'noopener',style:'color:var(--accent)',text:i.website.replace(/^https?:\/\//,'')}))]:null):null,
     !i.address?h('p',{class:'hint',text:'Ainda sem dados do Google. Use os botões para pesquisar.'}):null,
     h('div',{class:'row'},h('a',{class:'btn sm',href:mapsUrl(l),target:'_blank',rel:'noopener'},'Ver no Google Maps'),h('a',{class:'btn sm',href:googleUrl(l),target:'_blank',rel:'noopener'},'Pesquisar no Google')));}
 function renderSheet(){
@@ -443,7 +508,7 @@ function renderSheet(){
   const copy=h('button',{class:'btn sm',type:'button',onclick:async()=>{try{await navigator.clipboard.writeText(msg.value);toast('Mensagem copiada');}catch(e){msg.focus();msg.select();toast('Texto selecionado: copie');}}},'Copiar texto');
 
   const stages=h('div',{class:'stages'});
-  for(const s of STAGES)stages.append(h('button',{class:'stage-btn',type:'button','aria-pressed':String((l.stage||'novo')===s.id),onclick:()=>{if((l.stage||'novo')===s.id)return;l.stage=s.id;if(CLOSED.includes(s.id))l.next='';logTo(l,'Etapa: '+s.label);save();renderSheet();}},h('span',{class:'dot',style:'background:var(--s-'+s.id+')'}),s.label));
+  for(const s of STAGES)stages.append(h('button',{class:'stage-btn',type:'button',style:'--sc:var(--s-'+s.id+')','aria-pressed':String((l.stage||'novo')===s.id),onclick:()=>{if((l.stage||'novo')===s.id)return;l.stage=s.id;if(CLOSED.includes(s.id))l.next='';logTo(l,'Etapa: '+s.label);save();renderSheet();}},s.label));
 
   const next=h('input',{class:'field',type:'date',id:'f-next',value:l.next||'',onchange:e=>{l.next=e.target.value;save();renderSheet();}});
   const snooze=n=>h('button',{class:'btn sm',type:'button',onclick:()=>{l.next=addDays(today(),n);save();renderSheet();toast('Follow-up em '+fmt(l.next));}},'+'+n+(n===1?' dia':' dias'));
@@ -458,7 +523,7 @@ function renderSheet(){
   for(const e of [...(l.history||[])].reverse())hist.append(h('li',null,h('time',{text:fmt(e.d)}),h('span',{text:e.t})));
 
   sheet.append(
-    h('div',{class:'sheet-top'},h('div',{class:'sheet-top-in'},h('button',{class:'back',type:'button',onclick:()=>closeLead(),html:ICON.back+'<span>Leads</span>'}))),
+    h('div',{class:'sheet-top'},h('div',{class:'sheet-top-in'},h('button',{class:'back',type:'button',onclick:()=>closeLead(),html:ICON.back+'<span>Leads</span>'}),h('button',{class:'topdel'+(UI.arm===l.id?' armed':''),type:'button',onclick:()=>{if(UI.arm!==l.id){UI.arm=l.id;renderSheet();return;}DB.leads=DB.leads.filter(x=>x.id!==l.id);save();toast('Lead excluído');UI.arm=null;closeLead();}},UI.arm===l.id?'Confirmar':'Excluir'))),
     h('div',{class:'sheet-body'},
       h('div',{class:'lead-head'},avatar(l,true),h('div',{style:'min-width:0'},h('h2',{text:l.name||'Sem nome'}),h('p',{text:[l.area,l.segment,l.last?'último contato '+fmt(l.last):''].filter(Boolean).join(' · ')}))),
       aboutPanel(l),
@@ -482,11 +547,11 @@ function renderSheet(){
 }
 
 /* ================= new lead ================= */
-document.getElementById('fab').addEventListener('click',()=>{
-  const id='l'+Date.now().toString(36);
+function isBlank(l){return l&&l.name==='Nova empresa'&&!l.phone&&!l.contact&&!l.notes&&(l.history||[]).length<=1;}
+function newManual(){const id='l'+Date.now().toString(36);
   DB.leads.push({id,name:'Nova empresa',segment:'Outro',track:'',area:'',contact:'',phone:'',stage:'novo',last:'',next:'',notes:'',history:[{d:today(),t:'Lead criado'}]});save();
-  switchTab('leads');openLead(id);setTimeout(()=>{const f=document.getElementById('f-name');if(f){f.focus();f.select();}},250);
-});
+  openLead(id);setTimeout(()=>{const f=document.getElementById('f-name');if(f){f.focus();f.select();}},250);}
+document.getElementById('fab').addEventListener('click',()=>{switchTab('leads');setMode('disc');document.getElementById('scroller').scrollTop=0;setTimeout(()=>document.getElementById('f-bairro').focus(),150);});
 
 /* ================= messages screen ================= */
 function renderTpls(){const el=document.getElementById('tpls');el.replaceChildren();
@@ -512,7 +577,7 @@ document.getElementById('reset').addEventListener('click',e=>{const b=e.currentT
 function switchTab(tab){UI.tab=tab;UI.arm=null;
   for(const t of document.querySelectorAll('.tab'))t.setAttribute('aria-selected',String(t.dataset.tab===tab));
   document.getElementById('screen-leads').hidden=tab!=='leads';document.getElementById('screen-msgs').hidden=tab!=='msgs';document.getElementById('screen-backup').hidden=tab!=='backup';
-  document.getElementById('fab').hidden=tab!=='leads';
+  document.getElementById('fab').hidden=tab!=='leads'||UI.mode==='disc';
   if(tab==='leads')renderLeads();if(tab==='msgs')renderTpls();document.getElementById('scroller').scrollTop=0;}
 for(const t of document.querySelectorAll('.tab'))t.addEventListener('click',()=>switchTab(t.dataset.tab));
 
