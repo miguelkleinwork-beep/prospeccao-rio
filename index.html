@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#125E4D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Prospecção">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -28,7 +28,7 @@
   --f-display:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
   --f-body:"IBM Plex Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
-  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px); --tb:max(8px, calc(env(safe-area-inset-bottom,0px) - 6px));
+  --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px); --tb:max(12px, calc(env(safe-area-inset-bottom,0px) - 6px));
   --gut-l:max(16px, env(safe-area-inset-left,0px)); --gut-r:max(16px, env(safe-area-inset-right,0px));
   color-scheme:light;
 }
@@ -44,8 +44,10 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none}
 html{background:var(--surface)!important}
-html{height:var(--app-h,100%)}
-body{position:relative;display:flex;flex-direction:column;height:var(--app-h,100%)}
+html{height:100%}
+/* iOS 26 home-screen bug (WebKit 301108): the viewport is short by the status-bar height. Extend the root to the real screen edge. */
+@media (display-mode: standalone){html{height:min(100lvh, calc(100% + env(safe-area-inset-top,0px)))}}
+body{position:relative;display:flex;flex-direction:column;height:100%}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%}
 button,select,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
