@@ -43,6 +43,9 @@
   color-scheme:dark}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;overscroll-behavior:none}
+html{background:var(--surface)!important}
+:root.short-vp{--tb:6px}
+:root.short-vp .actionbar{padding-bottom:8px}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;-webkit-text-size-adjust:100%}
 button,select,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -260,6 +263,9 @@ label.f.wide{grid-column:1 / -1}
 <div class="toast" id="toast" hidden></div>
 
 <script>
+/* iOS standalone sometimes reports a viewport shorter than the screen: fill the gap with the bar color and drop the extra padding */
+function fitVP(){const gap=(window.screen&&screen.height)?screen.height-window.innerHeight:0;document.documentElement.classList.toggle('short-vp',navigator.standalone===true&&gap>20);}
+fitVP();window.addEventListener('resize',fitVP);
 /* ================= data ================= */
 const KEY='prospeccao-rio-v1';
 const STAGES=[
@@ -584,7 +590,9 @@ for(const t of document.querySelectorAll('.tab'))t.addEventListener('click',()=>
 /* ================= boot ================= */
 save();renderLeads();
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&sheet.hidden)renderLeads();});
-if('serviceWorker' in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+if('serviceWorker' in navigator){let reloaded=false;
+  navigator.serviceWorker.addEventListener('controllerchange',()=>{if(reloaded)return;reloaded=true;location.reload();});
+  window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(r=>{r.update();document.addEventListener('visibilitychange',()=>{if(!document.hidden)r.update();});}).catch(()=>{}));}
 </script>
 </body>
 </html>
