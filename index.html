@@ -110,14 +110,18 @@ a.chip{text-decoration:none}
 .bulk p{margin:0;font-size:13px;color:var(--ink)}
 .prog{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
 .prog i{display:block;height:100%;background:var(--accent)}
-.ev{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;grid-template-columns:56px minmax(0,1fr);gap:4px 12px}
-.ev .cal{grid-row:1 / span 3;background:var(--brand);color:var(--brand-ink);border-radius:12px;text-align:center;padding:8px 0;align-self:start}
-.ev .cal b{display:block;font-family:var(--f-display);font-size:20px;line-height:1}
-.ev .cal span{font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
-.ev .nm{font-weight:700;font-size:15px}
-.ev .sub{font-size:13px;color:var(--muted)}
-.ev .why{font-size:14px;margin:4px 0 0}
-.ev .acts{grid-column:1 / -1;display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.ev{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.ev-date{display:flex;align-items:center;gap:10px;background:var(--brand);color:var(--brand-ink);padding:12px 16px}
+.ev-date .d{font-family:var(--f-display);font-size:19px;font-weight:800;letter-spacing:-.01em;white-space:nowrap}
+.ev-date .arr{opacity:.55;font-size:16px}
+.ev-date .yr{font-size:13px;opacity:.7;font-weight:600}
+.ev-date .cd{margin-left:auto;font-size:12px;font-weight:700;background:rgba(255,255,255,.14);padding:4px 9px;border-radius:999px;white-space:nowrap}
+.ev-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:8px}
+.ev-body .nm{font-family:var(--f-display);font-weight:800;font-size:19px;line-height:1.2;text-wrap:balance}
+.ev-body .place{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.ev-body .place svg{width:15px;height:15px;flex:none}
+.ev-body .why{font-size:14px;margin:0;line-height:1.5}
+.ev-body .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
 .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;background:var(--accent-soft);color:var(--accent);margin-right:4px}
 /* tab bar + fab */
 .tabbar{position:relative;flex:none;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:0 var(--gut-r) var(--tb) var(--gut-l)}
@@ -606,25 +610,33 @@ function renderQueue(){qel.replaceChildren();const l=DB.leads.find(x=>x.id===QS.
 
 /* ================= events ================= */
 const EVENTS=[
- {d:'2026-11-10',end:'12 nov',name:'Sebrae Rio Summit 2026',place:'Riocentro, Barra Olímpica',tags:['Donos de pequenas empresas','Rio'],why:'Milhares de empreendedores do estado em três dias, com palestras e exposição. Bom para conhecer donos de lavanderias, oficinas e serviços. Inscrição só para empresas com sede no RJ.',url:'https://sebraeriosummit.com.br'},
- {d:'2027-04-20',end:'24 abr',name:'Automec 2027',place:'São Paulo Expo, São Paulo',tags:['Oficinas','Viagem'],why:'Maior feira de reparação automotiva do país. Donos de oficina e distribuidores circulam por lá. Vale se as oficinas virarem prioridade.',url:'https://www.automecfeira.com.br'},
- {d:'2027-06-14',end:'17 jun',name:'Web Summit Rio 2027',place:'Riocentro, Barra Olímpica',tags:['IA e tecnologia','Rio'],why:'Menos para achar fornecedores e mais para conhecer empresas de IA e robótica, possíveis compradores de dados e parceiros do George.',url:'https://rio.websummit.com'},
- {d:'2027-10-05',end:'7 out',name:'Feicon Rio 2027',place:'Riocentro, Barra Olímpica',tags:['Construção','Rio'],why:'Feira de construção e arquitetura. Construtoras, empreiteiros e marcenarias do Rio no mesmo lugar.',url:'https://www.feiconrio.com.br'}];
+ {d:'2026-11-10',e:'2026-11-12',name:'Sebrae Rio Summit 2026',place:'Riocentro · Barra Olímpica, Rio',tags:['Donos de pequenas empresas','Rio'],why:'Milhares de empreendedores do estado em três dias, com palestras e exposição. Bom para conhecer donos de lavanderias, oficinas e serviços. Inscrição só para empresas com sede no RJ.',url:'https://sebraeriosummit.com.br'},
+ {d:'2027-04-20',e:'2027-04-24',name:'Automec 2027',place:'São Paulo Expo · São Paulo',tags:['Oficinas','Viagem'],why:'Maior feira de reparação automotiva do país. Donos de oficina e distribuidores circulam por lá. Vale se as oficinas virarem prioridade.',url:'https://www.automecfeira.com.br'},
+ {d:'2027-06-14',e:'2027-06-17',name:'Web Summit Rio 2027',place:'Riocentro · Barra Olímpica, Rio',tags:['IA e tecnologia','Rio'],why:'Menos para achar empresas que gravam e mais para conhecer empresas de IA e robótica, possíveis compradores de dados e parceiros.',url:'https://rio.websummit.com'},
+ {d:'2027-10-05',e:'2027-10-07',name:'Feicon Rio 2027',place:'Riocentro · Barra Olímpica, Rio',tags:['Construção','Rio'],why:'Feira de construção e arquitetura. Construtoras, empreiteiros e marcenarias do Rio no mesmo lugar.',url:'https://www.feiconrio.com.br'}];
 const EV_MORE=[
  {name:'Eventos de negócios no Rio (Sympla)',why:'Cafés de networking e encontros de empreendedores toda semana. Filtre por "Negócios".',url:'https://www.sympla.com.br/eventos/rio-de-janeiro-rj/negocios'},
  {name:'Agenda de eventos do Rio (Visit Rio)',why:'Calendário geral da cidade, inclusive feiras no Riocentro.',url:'https://visitrio.com.br/eventos-no-rio-de-janeiro/'}];
 const MESES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const PIN='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>';
+function dm(iso){const [y,m,d]=iso.split('-');return (+d)+' '+MESES[+m-1];}
+function countdown(iso){const [y,m,d]=iso.split('-').map(Number);const t=new Date();t.setHours(0,0,0,0);const n=Math.round((new Date(y,m-1,d)-t)/86400000);
+  if(n<0)return 'acontecendo';if(n===0)return 'hoje';if(n===1)return 'amanhã';if(n<60)return 'em '+n+' dias';return 'em '+Math.round(n/30)+' meses';}
+function gcal(e){const f=x=>x.replace(/-/g,'');return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(e.name)+'&dates='+f(e.d)+'/'+f(addDays(e.e,1))+'&location='+encodeURIComponent(e.place)+'&details='+encodeURIComponent(e.why+'\n'+e.url);}
 function renderEvents(){const el=document.getElementById('events');el.replaceChildren();const t=today();
-  const up=EVENTS.filter(e=>e.d>=t||e.d.slice(0,7)>=t.slice(0,7));
+  const up=EVENTS.filter(e=>e.e>=t);
   el.append(h('h3',{class:'section-title',text:'Próximos eventos'}));
-  for(const e of up){const [y,m,d]=e.d.split('-');el.append(h('div',{class:'ev'},
-    h('div',{class:'cal'},h('b',{text:String(+d)}),h('span',{text:MESES[+m-1]+' '+y.slice(2)})),
-    h('div',{class:'nm',text:e.name}),h('div',{class:'sub',text:e.place+' · até '+e.end}),
-    h('div',null,...e.tags.map(x=>h('span',{class:'tag',text:x}))),
-    h('p',{class:'why',style:'grid-column:1 / -1',text:e.why}),
-    h('div',{class:'acts'},h('a',{class:'btn sm primary',href:e.url,target:'_blank',rel:'noopener'},'Ver o site'))));}
+  for(const e of up){const y=e.e.slice(0,4);el.append(h('article',{class:'ev'},
+    h('div',{class:'ev-date'},h('span',{class:'d',text:dm(e.d)}),h('span',{class:'arr','aria-hidden':'true',text:'→'}),h('span',{class:'d',text:dm(e.e)}),h('span',{class:'yr',text:y}),h('span',{class:'cd',text:countdown(e.d)})),
+    h('div',{class:'ev-body'},
+      h('div',{class:'nm',text:e.name}),
+      h('div',{class:'place',html:PIN+'<span></span>'}),
+      h('div',null,...e.tags.map(x=>h('span',{class:'tag',text:x}))),
+      h('p',{class:'why',text:e.why}),
+      h('div',{class:'acts'},h('a',{class:'btn sm primary',href:e.url,target:'_blank',rel:'noopener'},'Ver o site'),h('a',{class:'btn sm',href:gcal(e),target:'_blank',rel:'noopener'},'Salvar na agenda')))));
+    el.lastChild.querySelector('.place span').textContent=e.place;}
   el.append(h('h3',{class:'section-title',text:'Onde achar mais'}));
-  for(const e of EV_MORE)el.append(h('div',{class:'panel'},h('div',{style:'font-weight:600',text:e.name}),h('p',{class:'hint',text:e.why}),h('a',{class:'btn sm',href:e.url,target:'_blank',rel:'noopener'},'Abrir')));
+  for(const e of EV_MORE)el.append(h('div',{class:'panel'},h('div',{style:'font-weight:600',text:e.name}),h('p',{class:'hint',text:e.why}),h('div',null,h('a',{class:'btn sm',href:e.url,target:'_blank',rel:'noopener'},'Abrir'))));
   el.append(h('p',{class:'hint',text:'Lista revisada em 1 de novembro de 2026. Peça ao Claude para atualizar.'}));}
 
 /* ================= new lead ================= */
