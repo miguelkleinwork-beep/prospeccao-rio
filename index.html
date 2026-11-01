@@ -106,6 +106,19 @@ button{cursor:pointer}
 .facts dt{color:var(--muted);font-size:12px;font-weight:600;padding-top:2px}
 .facts dd{margin:0;min-width:0;overflow-wrap:anywhere}
 a.chip{text-decoration:none}
+.bulk{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--accent-soft);border-radius:14px;padding:10px 12px}
+.bulk p{margin:0;font-size:13px;color:var(--ink)}
+.prog{height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent)}
+.ev{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:grid;grid-template-columns:56px minmax(0,1fr);gap:4px 12px}
+.ev .cal{grid-row:1 / span 3;background:var(--brand);color:var(--brand-ink);border-radius:12px;text-align:center;padding:8px 0;align-self:start}
+.ev .cal b{display:block;font-family:var(--f-display);font-size:20px;line-height:1}
+.ev .cal span{font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.85}
+.ev .nm{font-weight:700;font-size:15px}
+.ev .sub{font-size:13px;color:var(--muted)}
+.ev .why{font-size:14px;margin:4px 0 0}
+.ev .acts{grid-column:1 / -1;display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.tag{display:inline-block;font-size:11px;font-weight:700;border-radius:6px;padding:2px 7px;background:var(--accent-soft);color:var(--accent);margin-right:4px}
 /* tab bar + fab */
 .tabbar{position:relative;flex:none;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding:0 var(--gut-r) var(--tb) var(--gut-l)}
 .tabbar-in{display:flex;gap:4px;width:100%;max-width:520px}
@@ -152,7 +165,8 @@ label.f.wide{grid-column:1 / -1}
 .btn.danger.armed{background:var(--danger);border-color:var(--danger);color:#fff}
 .btn svg{width:20px;height:20px;flex:none}
 .actionbar{position:relative;flex:none;z-index:31;background:var(--surface);border-top:1px solid var(--line);padding:8px var(--gut-r) max(8px, calc(var(--safe-b) - 8px)) var(--gut-l)}
-.actionbar-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:8px}
+.actionbar-in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+.actionbar .btn{font-size:14px;white-space:nowrap}
 .hist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
 .hist li{display:grid;grid-template-columns:48px minmax(0,1fr);gap:8px;font-size:14px}
 .hist time{font-family:var(--f-mono);color:var(--muted);font-size:12px;padding-top:2px}
@@ -198,6 +212,7 @@ label.f.wide{grid-column:1 / -1}
     </label>
     <div class="chips" id="stage-chips"></div>
     <div class="chips" id="seg-chips"></div>
+    <div class="bulk" id="bulk-row"><p id="bulk-txt"></p><button class="btn sm primary" id="bulk" type="button">Enviar em sequência</button></div>
     <ul class="list" id="list"></ul>
     </div>
     <div id="disc-view" class="stack" hidden>
@@ -221,6 +236,12 @@ label.f.wide{grid-column:1 / -1}
 <div id="screen-msgs" hidden>
   <header class="screen-head"><div class="screen-head-in"><h1>Mensagens</h1><p>Use {empresa} e {contato}: eles são trocados pelos dados do lead.</p></div></header>
   <div class="wrap" id="tpls"></div>
+</div>
+
+<!-- EVENTS -->
+<div id="screen-events" hidden>
+  <header class="screen-head"><div class="screen-head-in"><h1>Eventos</h1><p>Onde encontrar donos de empresa e gente do setor pessoalmente.</p></div></header>
+  <div class="wrap" id="events"></div>
 </div>
 
 <!-- BACKUP -->
@@ -249,6 +270,7 @@ label.f.wide{grid-column:1 / -1}
 </main>
 
 <!-- LEAD SHEET -->
+<section class="sheet" id="queue" hidden aria-label="Envio em sequência"></section>
 <section class="sheet" id="sheet" hidden aria-label="Lead"></section>
 
 <button class="fab" id="fab" type="button" aria-label="Novo lead"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -257,6 +279,7 @@ label.f.wide{grid-column:1 / -1}
   <div class="tabbar-in">
     <button class="tab" role="tab" data-tab="leads" aria-selected="true" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h12"/></svg>Leads</button>
     <button class="tab" role="tab" data-tab="msgs" aria-selected="false" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/></svg>Mensagens</button>
+    <button class="tab" role="tab" data-tab="events" aria-selected="false" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Eventos</button>
     <button class="tab" role="tab" data-tab="backup" aria-selected="false" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14"/></svg>Backup</button>
   </div>
 </nav>
@@ -370,6 +393,8 @@ function visible(){const q=UI.q.trim().toLowerCase();return DB.leads.filter(l=>{
 function renderList(){
   const el=document.getElementById('list');el.replaceChildren();
   const items=visible();
+  const sendable=items.filter(l=>phoneDigits(l.phone)&&!CLOSED.includes(l.stage)).length;
+  document.getElementById('bulk-row').hidden=!sendable;document.getElementById('bulk-txt').textContent=sendable+(sendable===1?' lead com telefone neste filtro':' leads com telefone neste filtro');
   if(!DB.leads.length){el.append(h('li',{class:'empty'},'Nenhum lead ainda. Toque no ',h('b',{text:'+'}),' para adicionar a primeira empresa.'));return;}
   if(!items.length){el.append(h('li',{class:'empty',text:UI.filter==='due'?'Nenhum follow-up para hoje. Bom momento para contatar leads novos.':'Nenhum lead neste filtro.'}));return;}
   for(const l of items){const st=stageOf(l.stage),due=dueState(l);
@@ -558,6 +583,52 @@ function renderSheet(){
   const sc=sheet.querySelector('.sheet-scroll');if(sc)sc.scrollTop=keepTop;
 }
 
+/* ================= send queue ================= */
+const qel=document.getElementById('queue');const QS={ids:[],i:0,tpl:null,sent:0};
+document.getElementById('bulk').addEventListener('click',()=>{const ids=visible().filter(l=>phoneDigits(l.phone)&&!CLOSED.includes(l.stage)).map(l=>l.id);if(!ids.length){toast('Nenhum lead com telefone neste filtro');return;}
+  QS.ids=ids;QS.i=0;QS.sent=0;QS.tpl=null;renderQueue();qel.hidden=false;});
+function endQueue(){qel.hidden=true;renderLeads();if(QS.sent)toast(QS.sent+(QS.sent===1?' mensagem registrada':' mensagens registradas'));}
+function renderQueue(){qel.replaceChildren();const l=DB.leads.find(x=>x.id===QS.ids[QS.i]);if(!l){endQueue();return;}
+  if(!QS.tpl||!DB.tpls.find(t=>t.id===QS.tpl)){const wantFollow=['enviada','respondeu','reuniao'].includes(l.stage);QS.tpl=((wantFollow&&DB.tpls.find(t=>/follow/i.test(t.name)))||DB.tpls[0]||{}).id||null;}
+  const tpl=DB.tpls.find(t=>t.id===QS.tpl);let draft=tpl?fill(tpl.body,l):'';
+  const msg=h('textarea',{class:'field msg','aria-label':'Mensagem',value:draft});
+  const wa=h('a',{class:'btn wa',href:waLink(l,draft),target:'_blank',rel:'noopener',html:ICON.wa+'<span>WhatsApp</span>'});
+  msg.addEventListener('input',()=>{wa.href=waLink(l,msg.value);});
+  const chips=h('div',{class:'tpl-chips'});for(const t of DB.tpls)chips.append(h('button',{class:'chip',type:'button','aria-pressed':String(t.id===QS.tpl),onclick:()=>{QS.tpl=t.id;renderQueue();}},t.name));
+  const next=h('button',{class:'btn primary',type:'button',html:ICON.check+'<span>Enviei · próxima</span>',onclick:()=>{const t=today();if((l.stage||'novo')==='novo')l.stage='enviada';l.last=t;l.next=addDays(t,3);logTo(l,'Mensagem enviada: '+((DB.tpls.find(x=>x.id===QS.tpl)||{}).name||'mensagem'));save();QS.sent++;QS.i++;renderQueue();}});
+  const skip=h('button',{class:'btn sm',type:'button',onclick:()=>{QS.i++;renderQueue();}},'Pular');
+  const pct=Math.round(QS.i/QS.ids.length*100);
+  qel.append(h('div',{class:'sheet-scroll'},
+    h('div',{class:'sheet-top'},h('div',{class:'sheet-top-in'},h('button',{class:'back',type:'button',onclick:endQueue,html:ICON.back+'<span>Encerrar</span>'}),h('span',{class:'mono',style:'font-size:13px;color:var(--muted)',text:(QS.i+1)+' de '+QS.ids.length}))),
+    h('div',{class:'sheet-body'},h('div',{class:'prog'},h('i',{style:'width:'+pct+'%'})),
+      h('div',{class:'lead-head'},avatar(l),h('div',{style:'min-width:0'},h('h2',{text:l.name}),h('p',{text:[l.area,l.segment,stars(l.info)].filter(Boolean).join(' · ')}))),
+      h('div',{class:'panel'},h('h3',{text:'Mensagem'}),chips,msg,h('div',{class:'row',style:'justify-content:space-between'},h('p',{class:'hint mono',text:'+'+phoneDigits(l.phone)}),skip)),
+      h('p',{class:'hint',text:'Toque em WhatsApp, envie a mensagem lá e volte aqui. Depois toque em "Enviei · próxima" para registrar e ir para o próximo.'}))),
+    h('div',{class:'actionbar'},h('div',{class:'actionbar-in'},wa,next)));}
+
+/* ================= events ================= */
+const EVENTS=[
+ {d:'2026-11-10',end:'12 nov',name:'Sebrae Rio Summit 2026',place:'Riocentro, Barra Olímpica',tags:['Donos de pequenas empresas','Rio'],why:'Milhares de empreendedores do estado em três dias, com palestras e exposição. Bom para conhecer donos de lavanderias, oficinas e serviços. Inscrição só para empresas com sede no RJ.',url:'https://sebraeriosummit.com.br'},
+ {d:'2027-04-20',end:'24 abr',name:'Automec 2027',place:'São Paulo Expo, São Paulo',tags:['Oficinas','Viagem'],why:'Maior feira de reparação automotiva do país. Donos de oficina e distribuidores circulam por lá. Vale se as oficinas virarem prioridade.',url:'https://www.automecfeira.com.br'},
+ {d:'2027-06-14',end:'17 jun',name:'Web Summit Rio 2027',place:'Riocentro, Barra Olímpica',tags:['IA e tecnologia','Rio'],why:'Menos para achar fornecedores e mais para conhecer empresas de IA e robótica, possíveis compradores de dados e parceiros do George.',url:'https://rio.websummit.com'},
+ {d:'2027-10-05',end:'7 out',name:'Feicon Rio 2027',place:'Riocentro, Barra Olímpica',tags:['Construção','Rio'],why:'Feira de construção e arquitetura. Construtoras, empreiteiros e marcenarias do Rio no mesmo lugar.',url:'https://www.feiconrio.com.br'}];
+const EV_MORE=[
+ {name:'Eventos de negócios no Rio (Sympla)',why:'Cafés de networking e encontros de empreendedores toda semana. Filtre por "Negócios".',url:'https://www.sympla.com.br/eventos/rio-de-janeiro-rj/negocios'},
+ {name:'Agenda de eventos do Rio (Visit Rio)',why:'Calendário geral da cidade, inclusive feiras no Riocentro.',url:'https://visitrio.com.br/eventos-no-rio-de-janeiro/'}];
+const MESES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+function renderEvents(){const el=document.getElementById('events');el.replaceChildren();const t=today();
+  const up=EVENTS.filter(e=>e.d>=t||e.d.slice(0,7)>=t.slice(0,7));
+  el.append(h('h3',{class:'section-title',text:'Próximos eventos'}));
+  for(const e of up){const [y,m,d]=e.d.split('-');el.append(h('div',{class:'ev'},
+    h('div',{class:'cal'},h('b',{text:String(+d)}),h('span',{text:MESES[+m-1]+' '+y.slice(2)})),
+    h('div',{class:'nm',text:e.name}),h('div',{class:'sub',text:e.place+' · até '+e.end}),
+    h('div',null,...e.tags.map(x=>h('span',{class:'tag',text:x}))),
+    h('p',{class:'why',style:'grid-column:1 / -1',text:e.why}),
+    h('div',{class:'acts'},h('a',{class:'btn sm primary',href:e.url,target:'_blank',rel:'noopener'},'Ver o site'))));}
+  el.append(h('h3',{class:'section-title',text:'Onde achar mais'}));
+  for(const e of EV_MORE)el.append(h('div',{class:'panel'},h('div',{style:'font-weight:600',text:e.name}),h('p',{class:'hint',text:e.why}),h('a',{class:'btn sm',href:e.url,target:'_blank',rel:'noopener'},'Abrir')));
+  el.append(h('p',{class:'hint',text:'Lista revisada em 1 de novembro de 2026. Peça ao Claude para atualizar.'}));}
+
 /* ================= new lead ================= */
 function isBlank(l){return l&&l.name==='Nova empresa'&&!l.phone&&!l.contact&&!l.notes&&(l.history||[]).length<=1;}
 function newManual(){const id='l'+Date.now().toString(36);
@@ -588,7 +659,7 @@ document.getElementById('reset').addEventListener('click',e=>{const b=e.currentT
 /* ================= tabs ================= */
 function switchTab(tab){UI.tab=tab;UI.arm=null;
   for(const t of document.querySelectorAll('.tab'))t.setAttribute('aria-selected',String(t.dataset.tab===tab));
-  document.getElementById('screen-leads').hidden=tab!=='leads';document.getElementById('screen-msgs').hidden=tab!=='msgs';document.getElementById('screen-backup').hidden=tab!=='backup';
+  document.getElementById('screen-leads').hidden=tab!=='leads';document.getElementById('screen-msgs').hidden=tab!=='msgs';document.getElementById('screen-backup').hidden=tab!=='backup';document.getElementById('screen-events').hidden=tab!=='events';if(tab==='events')renderEvents();
   document.getElementById('fab').hidden=tab!=='leads'||UI.mode==='disc';
   if(tab==='leads')renderLeads();if(tab==='msgs')renderTpls();document.getElementById('scroller').scrollTop=0;}
 for(const t of document.querySelectorAll('.tab'))t.addEventListener('click',()=>switchTab(t.dataset.tab));
