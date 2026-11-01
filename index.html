@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#125E4D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Prospecção">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -288,8 +288,6 @@ label.f.wide{grid-column:1 / -1}
 
 <script>
 /* iOS standalone sometimes reports a viewport shorter than the screen: fill the gap with the bar color and drop the extra padding */
-function fitVP(){const de=document.documentElement;const gap=(window.screen&&screen.height)?screen.height-window.innerHeight:0;const short=navigator.standalone===true&&gap>20&&window.innerWidth<window.innerHeight;de.classList.toggle('short-vp',short);if(short)de.style.setProperty('--app-h',screen.height+'px');else de.style.removeProperty('--app-h');}
-fitVP();window.addEventListener('resize',fitVP);
 /* ================= data ================= */
 const KEY='prospeccao-rio-v1';
 const STAGES=[
