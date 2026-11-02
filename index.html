@@ -229,6 +229,7 @@ label.f.wide{grid-column:1 / -1}
     <div class="sizebar" id="size-bar" aria-label="Porte"></div>
     <div class="chips" id="seg-chips"></div>
     <div class="bulk" id="bulk-row"><p id="bulk-txt"></p><button class="btn sm primary" id="bulk" type="button">Enviar em sequência</button></div>
+    <p class="hint" style="margin:0 2px">Ordenado por potencial: pessoas na equipe × chance de topar. Conversas em andamento e follow-ups do dia ficam no topo.</p>
     <ul class="list" id="list"></ul>
     </div>
     <div id="disc-view" class="stack" hidden>
@@ -424,8 +425,15 @@ function visible(){const q=UI.q.trim().toLowerCase();return DB.leads.filter(l=>{
   if(UI.seg&&l.segment!==UI.seg)return false;
   if(UI.size&&sizeOf(l)!==UI.size)return false;
   if(q&&![l.name,l.area,l.notes,l.contact,l.segment].join(' ').toLowerCase().includes(q))return false;
-  return true;}).sort((a,b)=>{const da=dueState(a)?0:1,db=dueState(b)?0:1;if(da!==db)return da-db;if(da===0&&a.next!==b.next)return a.next<b.next?-1:1;
-  const sa=STAGES.findIndex(s=>s.id===a.stage),sb=STAGES.findIndex(s=>s.id===b.stage);const ca=CLOSED.includes(a.stage)?1:0,cb=CLOSED.includes(b.stage)?1:0;if(ca!==cb)return ca-cb;if(sa!==sb)return sb-sa;return (a.name||'').localeCompare(b.name||'','pt');});}
+  return true;}).sort((a,b)=>{const ga=group(a),gb=group(b);if(ga!==gb)return ga-gb;if(ga===0&&a.next!==b.next)return a.next<b.next?-1:1;
+  return score(b)-score(a)||(a.name||'').localeCompare(b.name||'','pt');});}
+/* prioridade: pessoas estimadas x chance de topar */
+const SEG_ACCEPT={'Cooperativa/ONG':1.25,'Lavanderia':1.15,'Costura':1.15,'Oficina':1.05,'Marcenaria':1.05,'Serralheria':1.05,'Construção':0.95,'Padaria':0.9,'Limpeza':0.9,'Restaurante':0.85,'Hotel':0.7,'Outro':0.9};
+const SIZE_ACCEPT={P:1.1,M:1,G:0.75};
+function peopleEst(l){if(l.people)return l.people;const z=sizeOf(l),rv=(l.info&&l.info.reviews)||0;let n=z==='G'?80:(z==='M'?25:5);if(z==='P'&&rv>=300)n=10;if(z==='M'&&rv>=1000)n=40;return n;}
+function score(l){const d=phoneDigits(l.phone),r=l.info&&l.info.rating;let f=(SEG_ACCEPT[l.segment]||0.9)*SIZE_ACCEPT[sizeOf(l)];f*=d?(d.length===13?1.1:0.8):0.6;if(r>=4.7)f*=1.05;return peopleEst(l)*f;}
+function group(l){if(dueState(l))return 0;if(['reuniao','respondeu'].includes(l.stage))return 1;if(l.stage==='perdido')return 3;return 2;}
+const peopleTxt=l=>(l.people?l.people+' pessoas':'≈'+peopleEst(l)+' pessoas');
 function renderList(){
   const el=document.getElementById('list');el.replaceChildren();
   const items=visible();
@@ -442,7 +450,7 @@ function renderList(){
         sizeBadge(l),
         due?h('span',{class:'due',text:due==='late'?'Atrasado '+fmt(l.next):'Hoje'}):(l.next&&!CLOSED.includes(l.stage)?h('span',{class:'due calm',text:fmt(l.next)}):null)),
       h('span',{class:'sub',text:[l.area,l.segment].filter(Boolean).join(' · ')||'—'}),
-      (l.info&&(l.info.rating||l.info.hours))?h('span',{class:'sub meta2',text:[stars(l.info),l.info.hours].filter(Boolean).join('  ·  ')}):(l.phone?h('span',{class:'sub meta2 mono',text:l.phone}):null))));
+      h('span',{class:'sub meta2'},h('b',{style:'color:var(--ink);font-weight:600',text:peopleTxt(l)}),[stars(l.info),l.info&&l.info.hours].filter(Boolean).length?'  ·  '+[stars(l.info),l.info&&l.info.hours].filter(Boolean).join('  ·  '):''))));
   }
 }
 function renderLeads(){renderHeader();renderChips();renderList();renderDiscCount();}
@@ -464,7 +472,7 @@ function renderDisc(){
   ch.append(h('button',{class:'chip',type:'button','aria-pressed':String(!UI.dseg),onclick:()=>{UI.dseg='';renderDisc();}},'Todos',h('span',{class:'c',text:all.length})));
   for(const s of SEGS){const n=all.filter(d=>d.segment===s.id).length;if(!n)continue;ch.append(h('button',{class:'chip',type:'button','aria-pressed':String(UI.dseg===s.id),onclick:()=>{UI.dseg=UI.dseg===s.id?'':s.id;renderDisc();}},s.id,h('span',{class:'c',text:n})));}
   const el=document.getElementById('disc-list');el.replaceChildren();
-  const items=all.filter(d=>!UI.dseg||d.segment===UI.dseg).sort((a,b)=>(b.info.reviews||0)-(a.info.reviews||0));
+  const items=all.filter(d=>!UI.dseg||d.segment===UI.dseg).sort((a,b)=>score(b)-score(a));
   if(!items.length)el.append(h('li',{class:'empty',text:'Você já adicionou todas as empresas daqui. Use a busca no Google Maps abaixo ou peça mais ao Claude.'}));
   for(const d of items){el.append(h('li',{class:'dcard'},avatar(d),
     h('div',{style:'min-width:0'},h('div',{class:'nm',text:d.name}),h('div',{class:'sub'},sizeBadge(d),' ',[d.area,d.segment].filter(Boolean).join(' · ')),h('div',{class:'sub',text:[stars(d.info),d.info.hours].filter(Boolean).join('  ·  ')})),
