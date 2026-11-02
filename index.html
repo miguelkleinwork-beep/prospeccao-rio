@@ -435,7 +435,7 @@ const SEG_ACCEPT={'Parceiro/Canal':1.0,'Cooperativa/ONG':1.25,'Lavanderia':1.15,
 const SIZE_ACCEPT={P:1.1,M:1,G:0.75};
 function peopleEst(l){if(l.people)return l.people;const z=sizeOf(l),rv=(l.info&&l.info.reviews)||0;let n=z==='G'?80:(z==='M'?25:5);if(z==='P'&&rv>=300)n=10;if(z==='M'&&rv>=1000)n=40;return n;}
 function score(l){const d=phoneDigits(l.phone),r=l.info&&l.info.rating;let f=(l.warm?2.5:1)*(SEG_ACCEPT[l.segment]||0.9)*SIZE_ACCEPT[sizeOf(l)];f*=d?(d.length===13?1.1:0.8):0.6;if(r>=4.7)f*=1.05;return peopleEst(l)*f;}
-function group(l){if(dueState(l))return 0;if(['reuniao','respondeu'].includes(l.stage))return 1;if(l.stage==='perdido')return 3;return 2;}
+function group(l){if(dueState(l))return 0;if(['reuniao','respondeu'].includes(l.stage))return 1;if(l.warm&&l.stage!=='perdido')return 1;if(l.stage==='perdido')return 3;return 2;}
 const peopleTxt=l=>(l.people?l.people+' pessoas':'≈'+peopleEst(l)+' pessoas');
 function renderList(){
   const el=document.getElementById('list');el.replaceChildren();
