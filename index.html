@@ -461,14 +461,14 @@ function visible(){const q=UI.q.trim().toLowerCase();return DB.leads.filter(l=>{
 const SEG_ACCEPT={'Autônomo':1.2,'Parceiro/Canal':1.0,'Cooperativa/ONG':1.25,'Lavanderia':1.15,'Costura':1.15,'Oficina':1.05,'Marcenaria':1.05,'Serralheria':1.05,'Construção':0.95,'Padaria':0.9,'Limpeza':0.9,'Restaurante':0.85,'Hotel':0.7,'Outro':0.9};
 const SIZE_ACCEPT={P:1.1,M:1,G:0.75};
 function peopleEst(l){if(l.people)return l.people;const z=sizeOf(l),rv=(l.info&&l.info.reviews)||0;let n=z==='G'?80:(z==='M'?25:5);if(z==='P'&&rv>=300)n=10;if(z==='M'&&rv>=1000)n=40;return n;}
-function score(l){const d=phoneDigits(l.phone),r=l.info&&l.info.rating;let f=(l.warm?2.5:1)*(SEG_ACCEPT[l.segment]||0.9)*SIZE_ACCEPT[sizeOf(l)];f*=d?(d.length===13?1.1:0.8):0.6;if(r>=4.7)f*=1.05;return peopleEst(l)*f;}
+function score(l){const d=phoneDigits(l.phone),r=l.info&&l.info.rating;let f=(l.noWa?0.7:1)*(l.warm?2.5:1)*(SEG_ACCEPT[l.segment]||0.9)*SIZE_ACCEPT[sizeOf(l)];f*=d?(d.length===13?1.1:0.8):0.6;if(r>=4.7)f*=1.05;return peopleEst(l)*f;}
 function group(l){if(dueState(l))return 0;if(['reuniao','respondeu'].includes(l.stage))return 1;if(l.warm&&l.stage!=='perdido')return 1;if(l.stage==='perdido')return 3;return 2;}
 const peopleTxt=l=>(l.people?l.people+' pessoas':'≈'+peopleEst(l)+' pessoas');
 function renderList(){
   const el=document.getElementById('list');el.replaceChildren();
   const items=visible();
-  const sendable=items.filter(l=>phoneDigits(l.phone)&&!CLOSED.includes(l.stage)).length;
-  document.getElementById('bulk-row').hidden=!sendable;document.getElementById('bulk-txt').textContent=sendable+(sendable===1?' lead com telefone neste filtro':' leads com telefone neste filtro');
+  const sendable=items.filter(l=>canWa(l)&&!CLOSED.includes(l.stage)).length;const toCall=items.filter(l=>phoneDigits(l.phone)&&!canWa(l)&&!CLOSED.includes(l.stage)).length;
+  document.getElementById('bulk-row').hidden=!sendable&&!toCall;document.getElementById('bulk-txt').textContent=sendable+' com celular para WhatsApp'+(toCall?' · '+toCall+' para ligar':'');
   if(!DB.leads.length){el.append(h('li',{class:'empty'},'Nenhum lead ainda. Toque no ',h('b',{text:'+'}),' para adicionar a primeira empresa.'));return;}
   if(!items.length){el.append(h('li',{class:'empty',text:UI.filter==='due'?'Nenhum follow-up para hoje. Bom momento para contatar leads novos.':'Nenhum lead neste filtro.'}));return;}
   for(const l of items){const st=stageOf(l.stage),due=dueState(l);
@@ -479,6 +479,7 @@ function renderList(){
         h('span',{class:'stage-tag',style:'--sc:var(--s-'+st.id+')'},st.label),
         sizeBadge(l),
         l.warm?h('span',{class:'size-b',style:'--szc:var(--warn)',text:'Indicação'}):null,
+        (phoneDigits(l.phone)&&!canWa(l))?h('span',{class:'size-b',style:'--szc:var(--muted)',text:'Ligar'}):null,
         due?h('span',{class:'due',text:due==='late'?'Atrasado '+fmt(l.next):'Hoje'}):(l.next&&!CLOSED.includes(l.stage)?h('span',{class:'due calm',text:fmt(l.next)}):null)),
       h('span',{class:'sub',text:[l.area,l.segment].filter(Boolean).join(' · ')||'—'}),
       h('span',{class:'sub meta2'},h('b',{style:'color:var(--ink);font-weight:600',text:peopleTxt(l)}),[stars(l.info),l.info&&l.info.hours].filter(Boolean).length?'  ·  '+[stars(l.info),l.info&&l.info.hours].filter(Boolean).join('  ·  '):''))));
@@ -648,6 +649,8 @@ function renderSheet(){
       h('div',{class:'panel'},h('h3',{text:'Mensagem'}),sizeTip(l),tplChips,msg,
         h('div',{class:'row',style:'justify-content:space-between'},
           h('p',{class:'hint mono',text:hasPhone?'+'+phoneDigits(l.phone)+(mobile?'':' · fixo'):'sem telefone'}),copy),
+        hasPhone?h('div',{class:'row'},l.noWa?h('button',{class:'btn sm',type:'button',onclick:()=>{delete l.noWa;logTo(l,'WhatsApp disponível');save();renderSheet();}},'Tem WhatsApp, sim'):(mobile?h('button',{class:'btn sm',type:'button',onclick:()=>{markNoWa(l);renderSheet();}},'Este número não tem WhatsApp'):null),h('a',{class:'btn sm',href:igSearch(l),target:'_blank',rel:'noopener'},'Procurar Instagram/WhatsApp')):null,
+        l.noWa?h('p',{class:'hint',text:'Sem WhatsApp neste número: ligue, procure o Instagram da empresa ou passe pessoalmente. A mensagem copiada serve de roteiro.'}):null,
         hasPhone&&!mobile?h('p',{class:'hint',text:'Número fixo: o WhatsApp pode não funcionar. Use o botão Ligar.'}):null,
         !hasPhone?h('p',{class:'hint',text:'Sem telefone: o WhatsApp vai abrir para você escolher o contato.'}):null),
       h('div',{class:'panel'},h('h3',{text:'Próximo follow-up'}),
@@ -659,7 +662,7 @@ function renderSheet(){
         hasPhone?h('a',{class:'btn',href:'tel:+'+phoneDigits(l.phone),html:ICON.phone+'<span>Ligar</span>'}):null),
       h('div',{class:'panel'},h('h3',{text:'Histórico'}),hist),
       del)),
-    h('div',{class:'actionbar'},h('div',{class:'actionbar-in'},waBtn,sentBtn))
+    h('div',{class:'actionbar'},h('div',{class:'actionbar-in'},canWa(l)?waBtn:(hasPhone?callBtn(l,'btn wa'):waBtn),sentBtn))
   );
   const sc=sheet.querySelector('.sheet-scroll');if(sc)sc.scrollTop=keepTop;
 }
@@ -667,7 +670,7 @@ function renderSheet(){
 /* ================= send queue ================= */
 const qel=document.getElementById('queue');const QS={ids:[],i:0,tpl:null,sent:0};
 function startQueue(ids){if(!ids.length){toast('Nenhum lead com telefone neste filtro');return;}QS.ids=ids;QS.i=0;QS.sent=0;QS.tpl=null;renderQueue();qel.hidden=false;}
-document.getElementById('bulk').addEventListener('click',()=>startQueue(visible().filter(l=>phoneDigits(l.phone)&&!CLOSED.includes(l.stage)).map(l=>l.id)));
+document.getElementById('bulk').addEventListener('click',()=>startQueue(visible().filter(l=>canWa(l)&&!CLOSED.includes(l.stage)).map(l=>l.id)));
 function endQueue(){qel.hidden=true;renderLeads();if(UI.tab==='solo')renderSolo();if(QS.sent)toast(QS.sent+(QS.sent===1?' mensagem registrada':' mensagens registradas'));}
 function renderQueue(){qel.replaceChildren();const l=DB.leads.find(x=>x.id===QS.ids[QS.i]);if(!l){endQueue();return;}
   if(!QS.tpl||!DB.tpls.find(t=>t.id===QS.tpl)){const wantFollow=['enviada','respondeu','reuniao'].includes(l.stage);QS.tpl=((wantFollow&&DB.tpls.find(t=>/follow/i.test(t.name)))||defaultTpl(l)||{}).id||null;}
@@ -677,14 +680,14 @@ function renderQueue(){qel.replaceChildren();const l=DB.leads.find(x=>x.id===QS.
   msg.addEventListener('input',()=>{wa.href=waLink(l,msg.value);});
   const chips=h('div',{class:'tpl-chips'});for(const t of DB.tpls)chips.append(h('button',{class:'chip',type:'button','aria-pressed':String(t.id===QS.tpl),onclick:()=>{QS.tpl=t.id;renderQueue();}},t.name));
   const next=h('button',{class:'btn primary',type:'button',html:ICON.check+'<span>Enviei · próxima</span>',onclick:()=>{const t=today();if((l.stage||'novo')==='novo')l.stage='enviada';l.last=t;l.next=addDays(t,3);logTo(l,'Mensagem enviada: '+((DB.tpls.find(x=>x.id===QS.tpl)||{}).name||'mensagem'));save();QS.sent++;QS.i++;renderQueue();}});
-  const skip=h('button',{class:'btn sm',type:'button',onclick:()=>{QS.i++;renderQueue();}},'Pular');
+  const skip=h('div',{class:'row'},h('button',{class:'btn sm',type:'button',onclick:()=>{markNoWa(l);QS.i++;renderQueue();}},'Sem WhatsApp'),h('button',{class:'btn sm',type:'button',onclick:()=>{QS.i++;renderQueue();}},'Pular'));
   const pct=Math.round(QS.i/QS.ids.length*100);
   qel.append(h('div',{class:'sheet-scroll'},
     h('div',{class:'sheet-top'},h('div',{class:'sheet-top-in'},h('button',{class:'back',type:'button',onclick:endQueue,html:ICON.back+'<span>Encerrar</span>'}),h('span',{class:'mono',style:'font-size:13px;color:var(--muted)',text:(QS.i+1)+' de '+QS.ids.length}))),
     h('div',{class:'sheet-body'},h('div',{class:'prog'},h('i',{style:'width:'+pct+'%'})),
       h('div',{class:'lead-head'},avatar(l),h('div',{style:'min-width:0'},h('h2',{text:l.name}),h('p',{text:[l.area,l.segment,stars(l.info)].filter(Boolean).join(' · ')}))),
       h('div',{class:'panel'},h('h3',{text:'Mensagem'}),chips,msg,h('div',{class:'row',style:'justify-content:space-between'},h('p',{class:'hint mono',text:'+'+phoneDigits(l.phone)}),skip)),
-      h('p',{class:'hint',text:'Toque em WhatsApp, envie a mensagem lá e volte aqui. Depois toque em "Enviei · próxima" para registrar e ir para o próximo.'}))),
+      h('p',{class:'hint',text:'Toque em WhatsApp, envie a mensagem lá e volte aqui. Depois toque em "Enviei · próxima". Se o WhatsApp disser que o número não tem conta, toque em "Sem WhatsApp": o lead vai para a lista de ligar.'}))),
     h('div',{class:'actionbar'},h('div',{class:'actionbar-in'},wa,next)));}
 
 /* ================= autonomos ================= */
@@ -695,7 +698,7 @@ function renderSolo(){const el=document.getElementById('solo');el.replaceChildre
   const ch=h('div',{class:'chips'});const mk=(id,label,n)=>h('button',{class:'chip',type:'button','aria-pressed':String(UI.sk===id),onclick:()=>{UI.sk=UI.sk===id?'':id;renderSolo();}},label,h('span',{class:'c',text:n}));
   ch.append(mk('','Todos',all.length),mk('team','Com equipe',all.filter(l=>l.team).length));for(const k of kinds)ch.append(mk(k,k,all.filter(l=>l.kind===k).length));
   const items=all.filter(l=>!UI.sk||(UI.sk==='team'?l.team:l.kind===UI.sk)).sort((a,b)=>group(a)-group(b)||(b.team?1:0)-(a.team?1:0)||score(b)-score(a));
-  const sendable=items.filter(l=>phoneDigits(l.phone)&&!CLOSED.includes(l.stage));
+  const sendable=items.filter(l=>canWa(l)&&!CLOSED.includes(l.stage));
   el.append(ch,h('div',{class:'bulk'},h('p',{text:sendable.length+' com telefone neste filtro'}),h('button',{class:'btn sm primary',type:'button',onclick:()=>startQueue(sendable.map(l=>l.id))},'Enviar em sequência')));
   const tpl=DB.tpls.find(t=>t.id==='autonomo')||DB.tpls[0];
   const ul=h('ul',{class:'list'});
@@ -705,11 +708,18 @@ function renderSolo(){const el=document.getElementById('solo');el.replaceChildre
         h('div',{class:'sub'},h('span',{class:'stage-tag',style:'--sc:var(--s-'+st.id+')'},st.label),' ',l.team?h('span',{class:'size-b',style:'--szc:var(--sz-G)',text:'Equipe'}):null,' ',[l.kind,l.area].filter(Boolean).join(' · ')),
         h('div',{class:'sub',text:[stars(l.info),l.phone].filter(Boolean).join('  ·  ')})),
       h('div',{class:'acts'},
-        h('a',{class:'btn sm wa',href:waLink(l,msg),target:'_blank',rel:'noopener',html:ICON.wa+'<span>WhatsApp</span>'}),
+        canWa(l)?h('a',{class:'btn sm wa',href:waLink(l,msg),target:'_blank',rel:'noopener',html:ICON.wa+'<span>WhatsApp</span>'}):callBtn(l,'btn sm wa'),
+        canWa(l)?h('button',{class:'btn sm',type:'button',onclick:()=>{markNoWa(l);renderSolo();}},'Sem WhatsApp'):null,
         h('button',{class:'btn sm',type:'button',onclick:()=>{const t=today();if((l.stage||'novo')==='novo')l.stage='enviada';l.last=t;l.next=addDays(t,3);logTo(l,'Mensagem enviada: Autônomo');save();renderSolo();toast('Registrado · follow-up em '+fmt(l.next));}},'Enviada'),
         h('span',{class:'grow'}),
         h('button',{class:'btn sm',type:'button',onclick:()=>openLead(l.id)},'Ficha'))));}
   el.append(ul);}
+
+/* ================= WhatsApp disponível? ================= */
+const canWa=l=>isMobileNum(l.phone)&&!l.noWa;
+const igSearch=l=>'https://www.google.com/search?q='+encodeURIComponent((l.name||'')+' '+(l.area||'')+' Rio instagram whatsapp');
+function markNoWa(l){l.noWa=true;logTo(l,'Sem WhatsApp neste número');save();toast('Marcado: sem WhatsApp. Ligue ou procure outro contato.');}
+function callBtn(l,cls){return h('a',{class:cls||'btn',href:'tel:+'+phoneDigits(l.phone),html:ICON.phone+'<span>Ligar</span>'});}
 
 /* ================= painel de resultados ================= */
 const ORDER=['respondeu','reuniao','piloto'];

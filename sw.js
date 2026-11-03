@@ -1,4 +1,4 @@
-const CACHE = 'prospeccao-v24';
+const CACHE = 'prospeccao-v25';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './apple-touch-icon.png'];
 
 self.addEventListener('install', e => {
